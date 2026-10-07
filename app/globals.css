@@ -23,10 +23,10 @@
 }
 
 html {
-  font-size: 13px;
+  font-size: 10.5px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  zoom: 0.8;
+  zoom: 0.64;
   touch-action: manipulation;
   height: 100%;
 }

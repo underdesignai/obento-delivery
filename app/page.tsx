@@ -74,6 +74,7 @@ export default function DeliveryHomePage() {
   const [isEditingRider, setIsEditingRider] = useState(false);
   const [tempRiderName, setTempRiderName] = useState("");
   const [soundTested, setSoundTested] = useState(false);
+  const [selectedHistorialPedido, setSelectedHistorialPedido] = useState<Pedido | null>(null);
   
   // PWA Install Prompt State
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -967,16 +968,33 @@ export default function DeliveryHomePage() {
                 {(historial.pedidos || []).length === 0 ? (
                   <div style={{ textAlign: "center", padding: "24px 0", color: "rgba(255,255,255,0.4)" }}>No hay registros de entrega anteriores.</div>
                 ) : (
-                  (historial.pedidos || []).map((p, idx) => (
-                    <div key={idx} style={{
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      borderRadius: 14,
-                      padding: 16,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 8
-                    }}>
+                    (historial.pedidos || []).map((p, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => setSelectedHistorialPedido(p)}
+                      style={{
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1.5px solid rgba(255,255,255,0.1)",
+                        borderRadius: 14,
+                        padding: 16,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 8,
+                        cursor: "pointer",
+                        transition: "all 0.15s ease",
+                        position: "relative"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "rgba(255,255,255,0.07)";
+                        e.currentTarget.style.borderColor = "#c81e22";
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                        e.currentTarget.style.transform = "translateY(0)";
+                      }}
+                    >
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <span style={{ fontFamily: "monospace", fontWeight: 900, color: "#c81e22", fontSize: 18 }}>#{p.numero_pedido}</span>
                         <span style={{ fontSize: 13, color: "rgba(255,255,255,0.45)" }}>
@@ -986,9 +1004,12 @@ export default function DeliveryHomePage() {
                       </div>
                       <div style={{ fontWeight: 700, fontSize: 16 }}>👤 {p.cliente_nombre} ({p.cliente_telefono})</div>
                       <div style={{ fontSize: 15, color: "rgba(255,255,255,0.7)" }}>📍 {p.direccion_entrega} {p.direccion_detalles ? `(${p.direccion_detalles})` : ""}</div>
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, borderTop: "1px dashed rgba(255,255,255,0.08)", paddingTop: 8, marginTop: 4 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13.5, borderTop: "1px dashed rgba(255,255,255,0.08)", paddingTop: 8, marginTop: 4 }}>
                         <span>Rider: <strong>{p.repartidor_nombre || riderName}</strong></span>
-                        <span style={{ color: "#4ade80", fontWeight: 800 }}>⏱️ {p.tiempo_entrega_minutos ? `${p.tiempo_entrega_minutos} min` : "Entregado"}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <span style={{ color: "#4ade80", fontWeight: 800 }}>⏱️ {p.tiempo_entrega_minutos ? `${p.tiempo_entrega_minutos} min` : "Entregado"}</span>
+                          <span style={{ fontSize: 12, color: "#60a5fa", fontWeight: 700, background: "rgba(96,165,250,0.15)", padding: "2px 8px", borderRadius: 6 }}>Ver detalles ›</span>
+                        </div>
                       </div>
                     </div>
                   ))
@@ -1095,6 +1116,341 @@ export default function DeliveryHomePage() {
           </button>
         </div>
       </nav>
+
+      {/* ── MODAL DETALLES PEDIDO HISTORIAL / REVERTIR ENTREGA ── */}
+      {selectedHistorialPedido && (
+        <div
+          onClick={() => setSelectedHistorialPedido(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.85)",
+            backdropFilter: "blur(6px)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            padding: "0 0 env(safe-area-inset-bottom)"
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#161311",
+              border: "2px solid #eab308",
+              borderBottom: "none",
+              borderRadius: "24px 24px 0 0",
+              width: "100%",
+              maxWidth: 640,
+              maxHeight: "92vh",
+              overflowY: "auto",
+              padding: "24px 20px 36px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 18,
+              boxShadow: "0 -10px 50px rgba(0,0,0,0.9)",
+              color: "#ffffff"
+            }}
+          >
+            {/* Cabecera del Modal */}
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderBottom: "2px solid rgba(255,255,255,0.1)",
+              paddingBottom: 14,
+              gap: 12
+            }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                  <span style={{ fontFamily: "monospace", fontSize: 26, fontWeight: 900, color: "#ffffff" }}>
+                    #{selectedHistorialPedido.numero_pedido}
+                  </span>
+                  <span style={{
+                    fontSize: 14,
+                    fontWeight: 900,
+                    padding: "4px 10px",
+                    borderRadius: 14,
+                    background: selectedHistorialPedido.estado_pedido === "entregado"
+                      ? "rgba(34,197,94,0.22)"
+                      : "#fbbf24",
+                    color: selectedHistorialPedido.estado_pedido === "entregado" ? "#4ade80" : "#000",
+                    border: selectedHistorialPedido.estado_pedido === "entregado"
+                      ? "1.5px solid rgba(34,197,94,0.5)"
+                      : "none"
+                  }}>
+                    {selectedHistorialPedido.estado_pedido === "entregado" ? "✓ ENTREGADO" : "🔔 ¡LISTO PARA SALIR!"}
+                  </span>
+                </div>
+                <div style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", marginTop: 6 }}>
+                  Hora: {selectedHistorialPedido.created_at ? new Date(selectedHistorialPedido.created_at).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) : "Reciente"}
+                </div>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 30, fontWeight: 900, fontFamily: "monospace", color: "#f5efe6", lineHeight: 1 }}>
+                    {Number(selectedHistorialPedido.total).toFixed(2)} €
+                  </div>
+                  <div style={{
+                    fontSize: 13,
+                    fontWeight: 900,
+                    padding: "3px 8px",
+                    borderRadius: 8,
+                    display: "inline-block",
+                    marginTop: 4,
+                    background: selectedHistorialPedido.estado_pago === "pagado" || selectedHistorialPedido.metodo_pago === "stripe"
+                      ? "rgba(34,197,94,0.22)"
+                      : "rgba(251,191,36,0.22)",
+                    color: selectedHistorialPedido.estado_pago === "pagado" || selectedHistorialPedido.metodo_pago === "stripe"
+                      ? "#4ade80"
+                      : "#fbbf24",
+                    border: "1px solid rgba(255,255,255,0.2)"
+                  }}>
+                    {selectedHistorialPedido.estado_pago === "pagado" || selectedHistorialPedido.metodo_pago === "stripe" ? "✓ PAGADO ONLINE" : "💵 COBRAR EN MANO"}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setSelectedHistorialPedido(null)}
+                  style={{
+                    background: "rgba(255,255,255,0.1)",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: 38,
+                    height: 38,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#ffffff",
+                    cursor: "pointer"
+                  }}
+                >
+                  <X size={22} />
+                </button>
+              </div>
+            </div>
+
+            {/* Bloque Destino con Google Maps */}
+            <div style={{
+              background: "rgba(255,255,255,0.03)",
+              border: "2px solid rgba(200,30,34,0.5)",
+              borderRadius: 18,
+              padding: "18px 16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 12
+            }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#c81e22", fontWeight: 900, fontSize: 14, letterSpacing: 1 }}>
+                  <MapPin size={22} />
+                  <span>DIRECCIÓN DE ENTREGA</span>
+                </div>
+                <span style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", fontWeight: 700 }}>
+                  CP {selectedHistorialPedido.codigo_postal || "30107"} · La Ñora
+                </span>
+              </div>
+
+              <div style={{ fontSize: 24, fontWeight: 900, color: "#ffffff", lineHeight: 1.3 }}>
+                {selectedHistorialPedido.direccion_entrega || "Calle Mayor, La Ñora (Murcia)"}
+              </div>
+
+              {selectedHistorialPedido.direccion_detalles && (
+                <div style={{
+                  background: "rgba(251,191,36,0.15)",
+                  borderLeft: "4px solid #fbbf24",
+                  padding: "10px 14px",
+                  borderRadius: 8,
+                  fontSize: 16,
+                  color: "#fde68a",
+                  fontWeight: 700
+                }}>
+                  🏢 <strong>Piso / Detalles:</strong> {selectedHistorialPedido.direccion_detalles}
+                </div>
+              )}
+
+              {/* Botón GPS */}
+              <a
+                href={getMapsUrl(selectedHistorialPedido)}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  marginTop: 6,
+                  minHeight: 64,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12,
+                  background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)",
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  fontSize: 18,
+                  fontWeight: 900,
+                  padding: "14px 20px",
+                  borderRadius: 16,
+                  boxShadow: "0 6px 25px rgba(37,99,235,0.55)",
+                  letterSpacing: 0.5
+                }}
+              >
+                <Navigation size={24} />
+                <span>ABRIR EN GOOGLE MAPS (GPS)</span>
+              </a>
+            </div>
+
+            {/* Contacto con el Cliente */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ fontSize: 18, fontWeight: 800, color: "#ffffff" }}>
+                👤 Cliente: <strong>{selectedHistorialPedido.cliente_nombre}</strong>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <a
+                  href={`tel:${selectedHistorialPedido.cliente_telefono}`}
+                  style={{
+                    minHeight: 56,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 10,
+                    padding: "12px",
+                    borderRadius: 14,
+                    textDecoration: "none",
+                    fontSize: 17,
+                    fontWeight: 800,
+                    background: "rgba(255,255,255,0.08)",
+                    border: "2px solid rgba(255,255,255,0.22)",
+                    color: "#ffffff"
+                  }}
+                >
+                  <Phone size={22} color="#60a5fa" />
+                  <span>Llamar</span>
+                </a>
+
+                <a
+                  href={getWhatsAppUrl(selectedHistorialPedido)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    minHeight: 56,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 10,
+                    padding: "12px",
+                    borderRadius: 14,
+                    textDecoration: "none",
+                    fontSize: 17,
+                    fontWeight: 800,
+                    background: "rgba(37,211,102,0.18)",
+                    border: "2px solid rgba(37,211,102,0.5)",
+                    color: "#25d366"
+                  }}
+                >
+                  <MessageCircle size={22} />
+                  <span>WhatsApp</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Notas */}
+            {selectedHistorialPedido.notas && (
+              <div style={{
+                background: "rgba(200,30,34,0.12)",
+                borderLeft: "4px solid #c81e22",
+                padding: "12px 14px",
+                borderRadius: 8,
+                fontSize: 16,
+                color: "#fca5a5"
+              }}>
+                <strong>📝 Nota:</strong> {selectedHistorialPedido.notas}
+              </div>
+            )}
+
+            {/* Mochila térmica / Platos */}
+            <div style={{
+              background: "rgba(0,0,0,0.35)",
+              borderRadius: 14,
+              padding: 14,
+              border: "1.5px solid rgba(255,255,255,0.1)"
+            }}>
+              <div style={{ fontSize: 13, textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: 8, fontWeight: 800 }}>
+                Verificar Mochila ({selectedHistorialPedido.items?.reduce((a, b) => a + (b.cantidad || 1), 0) || 0} platos):
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {(selectedHistorialPedido.items || []).map((it, idx) => (
+                  <span key={idx} style={{
+                    fontSize: 15,
+                    background: "rgba(255,255,255,0.1)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    padding: "6px 12px",
+                    borderRadius: 10,
+                    color: "#f5efe6",
+                    fontWeight: 700
+                  }}>
+                    <strong>{it.cantidad}×</strong> {it.nombre}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Botones de acción / Reabrir o reactivar pedido */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 4 }}>
+              <button
+                onClick={async () => {
+                  await handleStatusChange(selectedHistorialPedido.id, "en_camino");
+                  setSelectedHistorialPedido(null);
+                  setActiveTab("activos");
+                }}
+                style={{
+                  width: "100%",
+                  minHeight: 64,
+                  border: "none",
+                  borderRadius: 16,
+                  fontSize: 18,
+                  fontWeight: 900,
+                  cursor: "pointer",
+                  background: "linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)",
+                  color: "#ffffff",
+                  boxShadow: "0 8px 25px rgba(168,85,247,0.45)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12
+                }}
+              >
+                <Bike size={26} />
+                <span>↺ REABRIR PEDIDO Y PONER EN CAMINO</span>
+              </button>
+
+              <button
+                onClick={async () => {
+                  await handleStatusChange(selectedHistorialPedido.id, "listo_reparto");
+                  setSelectedHistorialPedido(null);
+                  setActiveTab("activos");
+                }}
+                style={{
+                  width: "100%",
+                  minHeight: 54,
+                  border: "1.5px solid rgba(251,191,36,0.6)",
+                  borderRadius: 14,
+                  fontSize: 16,
+                  fontWeight: 800,
+                  cursor: "pointer",
+                  background: "rgba(251,191,36,0.15)",
+                  color: "#fbbf24",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 10
+                }}
+              >
+                <RefreshCw size={20} />
+                <span>Volver a dejar "Listo para salir"</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

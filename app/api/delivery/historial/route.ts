@@ -70,7 +70,16 @@ export async function GET() {
       pedidos: listado.map(p => ({
         ...p,
         total: Number(p.total),
-        items: p.pedido_items
+        notas: p.notas || (p as any).notas_cliente || null,
+        items: (p.pedido_items || []).map(it => ({
+          id: it.id,
+          nombre: it.nombre,
+          porcion: it.porcion,
+          opcion: it.opcion,
+          precio: Number(it.precio_unitario || 0),
+          cantidad: it.cantidad || 1,
+          subtotal: Number(it.subtotal || 0)
+        }))
       })),
       porHora,
       porDia

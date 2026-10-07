@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --bg-dark: #0a0908;
-  --bg-card: #151311;
-  --bg-card-hover: #1c1916;
-  --text-main: #f3ede0;
-  --text-muted: #9c9489;
+  --bg-dark: #080706;
+  --bg-surface: #12100e;
+  --bg-card: #181512;
+  --bg-card-hover: #221e1a;
+  --text-main: #f5efe6;
+  --text-muted: #a39b8e;
   --crimson: #c81e22;
   --crimson-light: #e63946;
   --gold: #fbbf24;
@@ -21,11 +22,20 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+  height: 100%;
+}
+
+body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  min-height: 100%;
   min-height: 100vh;
   min-height: -webkit-fill-available;
   overscroll-behavior-y: none;
@@ -34,23 +44,32 @@ html, body {
 /* Animations */
 @keyframes pulseBlink {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.65; transform: scale(1.02); }
+  50% { opacity: 0.6; transform: scale(1.03); }
 }
 
 .pulse {
-  animation: pulseBlink 1.4s infinite ease-in-out;
+  animation: pulseBlink 1.3s infinite ease-in-out;
+}
+
+@keyframes spinAnim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spinAnim 1s linear infinite;
 }
 
 @keyframes radarWave {
   0% {
-    transform: scale(0.6);
+    transform: scale(0.4);
     opacity: 0.9;
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.45;
   }
   100% {
-    transform: scale(2.2);
+    transform: scale(2.4);
     opacity: 0;
   }
 }
@@ -58,8 +77,9 @@ html, body {
 .radar-ring {
   position: absolute;
   border-radius: 50%;
-  border: 1.5px solid rgba(200, 30, 34, 0.4);
+  border: 2px solid rgba(200, 30, 34, 0.45);
   animation: radarWave 3s infinite cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
 }
 
 .radar-ring:nth-child(2) {
@@ -72,30 +92,26 @@ html, body {
 
 /* Glow effects */
 .glow-gold {
-  box-shadow: 0 0 25px rgba(251, 191, 36, 0.35);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
 }
 
 .glow-purple {
-  box-shadow: 0 0 25px rgba(168, 85, 247, 0.35);
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
 }
 
 .glow-crimson {
-  box-shadow: 0 0 25px rgba(200, 30, 34, 0.45);
+  box-shadow: 0 0 30px rgba(200, 30, 34, 0.5);
 }
 
 .glow-green {
-  box-shadow: 0 0 25px rgba(34, 197, 94, 0.35);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.4);
 }
 
-/* Custom scrollbars */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* Safe Area Insets for mobile */
+.safe-bottom {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
 }
-::-webkit-scrollbar-track {
-  background: #0f0e0c;
-}
-::-webkit-scrollbar-thumb {
-  background: #2a2723;
-  border-radius: 3px;
+
+.safe-top {
+  padding-top: max(12px, env(safe-area-inset-top));
 }

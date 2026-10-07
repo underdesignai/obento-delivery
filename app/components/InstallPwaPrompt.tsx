@@ -52,62 +52,57 @@ export default function InstallPwaPrompt() {
 
   return (
     <>
-      {/* Botón flotante nativo para Android / Chrome */}
+      {/* Banner de instalación nativa para Android / Chrome */}
       {deferredPrompt && (
         <aside
           aria-label="Instalación de la aplicación"
           style={{
-            position: "fixed",
-            bottom: 20,
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 9999,
-            width: "calc(100% - 32px)",
-            maxWidth: 420,
-            background: "#181513",
+            margin: "0 0 16px 0",
+            width: "100%",
+            background: "linear-gradient(135deg, #1f1a17 0%, #171412 100%)",
             border: "1.5px solid #c81e22",
-            borderRadius: 14,
-            padding: "12px 16px",
-            boxShadow: "0 12px 35px rgba(0,0,0,0.85), 0 0 20px rgba(200,30,34,0.35)",
+            borderRadius: 16,
+            padding: "14px 18px",
+            boxShadow: "0 8px 25px rgba(200,30,34,0.25)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             gap: 12
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{
-              width: 36,
-              height: 36,
+              width: 44,
+              height: 44,
               borderRadius: "50%",
-              background: "rgba(200,30,34,0.15)",
-              border: "1px solid #c81e22",
+              background: "rgba(200,30,34,0.18)",
+              border: "1.5px solid #c81e22",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               color: "#c81e22",
               flexShrink: 0
             }}>
-              <Download size={18} />
+              <Download size={22} />
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: 13, color: "#fff" }}>Instalar Obento Rider</div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)" }}>Acceso directo y pantalla completa</div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: "#ffffff" }}>Instalar Obento Rider</div>
+              <div style={{ fontSize: 13, color: "rgba(255,255,255,0.65)" }}>Acceso directo a pantalla completa</div>
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <button
               onClick={handleInstallClick}
               style={{
                 background: "#c81e22",
-                color: "#fff",
+                color: "#ffffff",
                 border: "none",
-                padding: "8px 14px",
-                borderRadius: 8,
+                padding: "10px 18px",
+                borderRadius: 10,
                 fontWeight: 900,
-                fontSize: 12,
+                fontSize: 14,
                 cursor: "pointer",
-                letterSpacing: "0.5px"
+                letterSpacing: 0.5
               }}
             >
               INSTALAR
@@ -117,14 +112,14 @@ export default function InstallPwaPrompt() {
               style={{
                 background: "transparent",
                 border: "none",
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.5)",
                 cursor: "pointer",
-                padding: 4,
+                padding: 6,
                 display: "flex"
               }}
               title="Cerrar"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
           </div>
         </aside>
@@ -135,30 +130,30 @@ export default function InstallPwaPrompt() {
         <aside
           aria-label="Instrucciones de instalación para iOS"
           style={{
-            margin: "12px 0",
-            padding: "10px 14px",
-            background: "rgba(200,30,34,0.08)",
-            border: "1px dashed rgba(200,30,34,0.35)",
-            borderRadius: 10,
-            fontSize: 12,
-            color: "rgba(255,255,255,0.8)",
+            margin: "0 0 16px 0",
+            padding: "12px 16px",
+            background: "rgba(200,30,34,0.1)",
+            border: "1.5px dashed rgba(200,30,34,0.4)",
+            borderRadius: 14,
+            fontSize: 14,
+            color: "rgba(255,255,255,0.9)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 10
+            gap: 12
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Smartphone size={16} color="#c81e22" />
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <Smartphone size={20} color="#c81e22" />
             <span>
-              <strong>Instalar en iPhone:</strong> Pulsa Compartir <span style={{ fontSize: 13 }}>⎋</span> y selecciona <em>"Añadir a pantalla de inicio"</em>.
+              <strong>Instalar en iPhone:</strong> Pulsa Compartir <span style={{ fontSize: 15 }}>⎋</span> y elige <em>"Añadir a pantalla de inicio"</em>.
             </span>
           </div>
           <button
             onClick={() => setDismissed(true)}
-            style={{ background: "transparent", border: "none", color: "rgba(255,255,255,0.4)", cursor: "pointer" }}
+            style={{ background: "transparent", border: "none", color: "rgba(255,255,255,0.5)", cursor: "pointer", padding: 4 }}
           >
-            <X size={14} />
+            <X size={16} />
           </button>
         </aside>
       )}

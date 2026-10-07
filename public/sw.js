@@ -1,16 +1,16 @@
-const CACHE_NAME = 'obento-delivery-v1';
+const CACHE_NAME = 'obento-delivery-v2';
 
 const PRECACHE_ASSETS = [
-  '/',
   '/manifest.json',
   '/images/logo-obento.png'
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(PRECACHE_ASSETS);
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
@@ -20,6 +20,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
+            console.log('🧹 Eliminando caché obsoleta:', cache);
             return caches.delete(cache);
           }
         })
@@ -28,6 +29,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Estrategia Network-First para contenido en vivo, offline fallback para estáticos
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || event.request.url.includes('/api/')) {
     return;
@@ -36,12 +38,6 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
         return networkResponse;
       })
       .catch(() => {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'obento-delivery-v2';
+const CACHE_NAME = 'obento-delivery-v3';
 
 const PRECACHE_ASSETS = [
   '/manifest.json',
@@ -29,7 +29,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Estrategia Network-First para contenido en vivo, offline fallback para estáticos
+// Network-First para todo contenido interactivo
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || event.request.url.includes('/api/')) {
     return;

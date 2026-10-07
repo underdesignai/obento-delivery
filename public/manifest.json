@@ -1,20 +1,25 @@
 {
-  "name": "Obento Delivery",
-  "short_name": "Delivery",
+  "name": "Obento Delivery · Repartidores",
+  "short_name": "Obento Rider",
+  "description": "Terminal oficial de reparto y navegación GPS de Obento Japanese Food",
   "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0c0b0a",
   "theme_color": "#c81e22",
+  "scope": "/",
   "icons": [
     {
       "src": "/images/logo-obento.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/images/logo-obento.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

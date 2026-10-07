@@ -16,6 +16,7 @@ import {
   TrendingUp,
   AlertCircle
 } from "lucide-react";
+import InstallPwaPrompt from "@/app/components/InstallPwaPrompt";
 
 type ItemPedido = {
   id: number;
@@ -267,6 +268,7 @@ export default function DeliveryHomePage() {
 
       {/* CONTENIDO PRINCIPAL */}
       <main style={{ maxWidth: 860, margin: "0 auto", padding: 16, width: "100%", flex: 1 }}>
+        <InstallPwaPrompt />
         {loading ? (
           <div style={{ textAlign: "center", padding: "60px 20px", color: "rgba(255,255,255,0.5)" }}>
             <Clock className="pulse" size={36} style={{ margin: "0 auto 12px", color: "#c81e22" }} />

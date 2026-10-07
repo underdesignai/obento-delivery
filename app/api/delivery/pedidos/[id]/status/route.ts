@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { sendOrderInDeliveryEmail } from "@/lib/email";
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -10,7 +11,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
 
     const current = await prisma.pedidos.findUnique({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
+      include: { pedido_items: true }
     });
 
     if (!current) {
@@ -38,9 +40,19 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       data: updateData
     });
 
+    // Enviar correo electrónico al cliente cuando el pedido sale a reparto
+    if (estado_pedido === "en_camino" && current.cliente_email) {
+      sendOrderInDeliveryEmail(current.cliente_email, {
+        ...current,
+        repartidor_nombre: repartidor_nombre || current.repartidor_nombre,
+        items: current.pedido_items
+      }).catch(err => console.error("⚠️ Error disparando email de reparto:", err));
+    }
+
     return Response.json(updated);
   } catch (err: any) {
     console.error("[delivery status PATCH]", err);
     return Response.json({ error: "Error al actualizar estado" }, { status: 500 });
   }
 }
+

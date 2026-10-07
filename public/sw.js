@@ -1,4 +1,4 @@
-const CACHE_NAME = 'obento-delivery-v10';
+const CACHE_NAME = 'obento-delivery-v11';
 
 const PRECACHE_ASSETS = [
   '/manifest.json',

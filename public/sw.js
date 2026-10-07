@@ -1,4 +1,4 @@
-const CACHE_NAME = 'obento-delivery-v3';
+const CACHE_NAME = 'obento-delivery-v4';
 
 const PRECACHE_ASSETS = [
   '/manifest.json',
@@ -29,7 +29,6 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Network-First para todo contenido interactivo
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || event.request.url.includes('/api/')) {
     return;

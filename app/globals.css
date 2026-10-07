@@ -41,15 +41,17 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* REDUCCIÓN DE LA WEB COMPLETA A LA MITAD EN DISPOSITIVOS MÓVILES */
+/* OPTIMIZACIÓN APP MÓVIL (NATIVE FEEL, SIN ZOOM MANUAL) */
 @media (max-width: 768px) {
   html {
-    zoom: 0.75;
     overflow-x: hidden;
+    touch-action: pan-x pan-y;
   }
   body {
     overflow-x: hidden;
     width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
   }
 }
 

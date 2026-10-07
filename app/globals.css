@@ -41,10 +41,10 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* ESCALADO COMPLETO DE LA WEB EN DISPOSITIVOS MÓVILES */
+/* REDUCCIÓN DE LA WEB COMPLETA A LA MITAD EN DISPOSITIVOS MÓVILES */
 @media (max-width: 768px) {
   html {
-    zoom: 1.45;
+    zoom: 0.75;
     overflow-x: hidden;
   }
   body {

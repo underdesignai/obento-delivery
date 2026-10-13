@@ -20,7 +20,8 @@ import {
   UserCheck,
   PackageCheck,
   Download,
-  X
+  X,
+  LogOut
 } from "lucide-react";
 
 type ItemPedido = {
@@ -250,6 +251,15 @@ export default function DeliveryHomePage() {
     };
   }, [historial]);
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/auth/logout", { method: "POST" });
+      window.location.href = "/login";
+    } catch {
+      window.location.href = "/login";
+    }
+  };
+
   return (
     <div style={{
       minHeight: "100vh",
@@ -319,32 +329,55 @@ export default function DeliveryHomePage() {
           </div>
         </div>
 
-        {/* Botón de Servicio Grande */}
-        <button
-          onClick={() => setIsOnDuty(!isOnDuty)}
-          style={{
-            background: isOnDuty ? "rgba(34,197,94,0.2)" : "rgba(239,68,68,0.2)",
-            border: isOnDuty ? "2px solid #22c55e" : "2px solid #ef4444",
-            padding: "10px 18px",
-            borderRadius: 24,
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            cursor: "pointer",
-            transition: "all 0.2s"
-          }}
-        >
-          <span style={{
-            width: 12,
-            height: 12,
-            borderRadius: "50%",
-            background: isOnDuty ? "#22c55e" : "#ef4444",
-            boxShadow: isOnDuty ? "0 0 14px #22c55e" : "0 0 14px #ef4444"
-          }}></span>
-          <span style={{ fontSize: 16, fontWeight: 900, color: isOnDuty ? "#4ade80" : "#fca5a5" }}>
-            {isOnDuty ? "EN RUTA" : "PAUSADO"}
-          </span>
-        </button>
+        {/* Botones Derecha: Servicio y Salir */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button
+            onClick={() => setIsOnDuty(!isOnDuty)}
+            style={{
+              background: isOnDuty ? "rgba(34,197,94,0.2)" : "rgba(239,68,68,0.2)",
+              border: isOnDuty ? "2px solid #22c55e" : "2px solid #ef4444",
+              padding: "10px 18px",
+              borderRadius: 24,
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              cursor: "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            <span style={{
+              width: 12,
+              height: 12,
+              borderRadius: "50%",
+              background: isOnDuty ? "#22c55e" : "#ef4444",
+              boxShadow: isOnDuty ? "0 0 14px #22c55e" : "0 0 14px #ef4444"
+            }}></span>
+            <span style={{ fontSize: 16, fontWeight: 900, color: isOnDuty ? "#4ade80" : "#fca5a5" }}>
+              {isOnDuty ? "EN RUTA" : "PAUSADO"}
+            </span>
+          </button>
+
+          <button
+            onClick={handleLogout}
+            title="Cerrar sesión"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1.5px solid rgba(255,255,255,0.15)",
+              borderRadius: 12,
+              padding: "10px 12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              color: "#a89f8d",
+              transition: "all 0.2s"
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = "#ffffff")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#a89f8d")}
+          >
+            <LogOut size={20} />
+          </button>
+        </div>
       </header>
 
       {/* ── BANNER DISCRETO DE INSTALACIÓN PWA ── */}

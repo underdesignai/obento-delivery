@@ -8,7 +8,7 @@ RUN apt-get update -y && apt-get install -y openssl ca-certificates && rm -rf /v
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm install
+RUN npm install --include=dev
 
 COPY . .
 

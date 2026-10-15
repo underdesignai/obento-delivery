@@ -266,26 +266,37 @@ export default function DeliveryHomePage() {
       width: "100%",
       display: "flex",
       flexDirection: "column",
+      alignItems: "center",
       background: "#080706",
       color: "#f5efe6",
       overflowX: "hidden"
     }}>
-      
-      {/* ── CABECERA GIGANTE (DOBLE DE TAMAÑO) ── */}
-      <header style={{
-        background: "#141210",
-        borderBottom: "2.5px solid rgba(200,30,34,0.45)",
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        boxShadow: "0 6px 30px rgba(0,0,0,0.85)",
+      {/* Contenedor tipo App Móvil centrado */}
+      <div style={{
         width: "100%",
-        minHeight: 82,
+        maxWidth: 580,
+        minHeight: "100vh",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "12px 18px"
+        flexDirection: "column",
+        background: "#0c0b0a",
+        position: "relative",
+        boxShadow: "0 0 50px rgba(0,0,0,0.8)"
       }}>
+        {/* ── CABECERA DE LA APP ── */}
+        <header style={{
+          background: "#141210",
+          borderBottom: "2px solid rgba(200,30,34,0.45)",
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          boxShadow: "0 4px 20px rgba(0,0,0,0.85)",
+          width: "100%",
+          minHeight: 70,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "10px 16px"
+        }}>
         {/* Logo y Nombre */}
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{
@@ -1053,21 +1064,22 @@ export default function DeliveryHomePage() {
         )}
       </main>
 
-      {/* ── BARRA INFERIOR FIJA GIGANTE (DOBLE TAMAÑO) ── */}
+      {/* ── BARRA INFERIOR FIJA (ESTILO APP NATIVA) ── */}
       <nav style={{
         position: "fixed",
         bottom: 0,
-        left: 0,
-        right: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
         width: "100%",
-        minHeight: 85,
+        maxWidth: 580,
+        minHeight: 74,
         background: "#110f0d",
-        borderTop: "2.5px solid rgba(200,30,34,0.45)",
+        borderTop: "2px solid rgba(200,30,34,0.45)",
         zIndex: 100,
         boxShadow: "0 -8px 30px rgba(0,0,0,0.9)",
-        paddingBottom: "max(16px, env(safe-area-inset-bottom))"
+        paddingBottom: "max(12px, env(safe-area-inset-bottom))"
       }}>
-        <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "10px 0 4px" }}>
+        <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "8px 0 2px" }}>
           
           {/* Pestaña 1: Repartos Activos */}
           <button
@@ -1484,6 +1496,7 @@ export default function DeliveryHomePage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -169,7 +169,9 @@ function itemsTableHtml(items: any[]) {
 export async function sendOrderInDeliveryEmail(to: string, data: any) {
   if (!to) return;
 
-  const isEfectivo = data.metodo_pago === "efectivo" || (data.metodo_pago !== "stripe" && data.estado_pago !== "pagado");
+  const isOnlinePay = data.metodo_pago === "stripe" || data.estado_pago === "pagado";
+  const isPendingPayment = !isOnlinePay;
+  const totalFormatted = Number(data.total || 0).toFixed(2).replace(".", ",");
   const rider = data.repartidor_nombre ? data.repartidor_nombre : "Nuestro repartidor";
   const trackingUrl = `https://pedidos.obentojapanesefood.es/seguimiento?id=${data.numero_pedido}`;
 
@@ -206,22 +208,31 @@ export async function sendOrderInDeliveryEmail(to: string, data: any) {
     </div>
 
     <!-- Recordatorio de Pago si es en mano vs Online -->
-    ${isEfectivo ? `
-    <div style="background:rgba(251,191,36,0.1);border:1.5px solid rgba(251,191,36,0.35);border-radius:8px;padding:14px 18px;margin-bottom:22px;">
-      <div style="font-size:13px;font-weight:800;color:#fbbf24;margin-bottom:4px;">
-        💵 PAGO PENDIENTE EN EFECTIVO
+    ${isPendingPayment ? `
+    <div style="background:rgba(251,191,36,0.12);border:2px solid #fbbf24;border-radius:12px;padding:20px 22px;margin-bottom:24px;text-align:center;">
+      <div style="display:inline-block;padding:4px 12px;border-radius:14px;background:#fbbf24;color:#0d0d12;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">
+        💵 PAGO PENDIENTE AL REPARTIDOR
       </div>
-      <div style="font-size:13px;color:#e5e7eb;">
-        Por favor ten preparado el importe en efectivo para agilizar la entrega: <strong>${Number(data.total).toFixed(2).replace(".", ",")} €</strong>.
+      <div style="font-size:13px;color:#d1d5db;margin-bottom:4px;">
+        Importe total a abonar al repartidor:
+      </div>
+      <div style="font-size:32px;font-weight:900;color:#fbbf24;font-family:monospace;letter-spacing:0.04em;line-height:1.1;">
+        ${totalFormatted} €
+      </div>
+      <div style="font-size:14px;color:#f3ede0;font-weight:700;margin-top:12px;line-height:1.4;">
+        Puedes pagar en <span style="color:#fbbf24;">EFECTIVO</span> o con <span style="color:#fbbf24;">TARJETA</span> (datáfono) directamente al repartidor.
+      </div>
+      <div style="font-size:12px;color:#9ca3af;margin-top:6px;">
+        Por favor ten preparado el importe exacto o tu tarjeta para agilizar la entrega en tu puerta.
       </div>
     </div>
     ` : `
-    <div style="background:rgba(34,197,94,0.1);border:1.5px solid rgba(34,197,94,0.35);border-radius:8px;padding:12px 18px;margin-bottom:22px;">
-      <div style="font-size:13px;font-weight:800;color:#4ade80;">
+    <div style="background:rgba(34,197,94,0.1);border:1.5px solid rgba(34,197,94,0.35);border-radius:10px;padding:16px 20px;margin-bottom:22px;text-align:center;">
+      <div style="font-size:13px;font-weight:800;color:#4ade80;margin-bottom:4px;">
         ✓ PEDIDO PAGADO ONLINE CON TARJETA
       </div>
       <div style="font-size:13px;color:#d1d5db;margin-top:2px;">
-        No tienes que pagar nada al repartidor. Solo recoger y disfrutar.
+        No tienes que abonar nada al repartidor. Solo recoger tu pedido y disfrutar.
       </div>
     </div>
     `}
@@ -240,8 +251,8 @@ export async function sendOrderInDeliveryEmail(to: string, data: any) {
     ${itemsTableHtml(data.items || data.pedido_items || [])}
 
     <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0 0;border-top:2px solid rgba(255,255,255,0.1);margin-bottom:20px;">
-      <span style="font-size:15px;font-weight:700;color:#f3ede0;">Total del pedido:</span>
-      <span style="font-size:22px;font-weight:900;color:#c81e22;font-family:monospace;">${Number(data.total).toFixed(2).replace(".", ",")} €</span>
+      <span style="font-size:15px;font-weight:700;color:#f3ede0;">${isPendingPayment ? "Total a abonar al repartidor:" : "Total del pedido:"}</span>
+      <span style="font-size:22px;font-weight:900;color:${isPendingPayment ? "#fbbf24" : "#c81e22"};font-family:monospace;">${totalFormatted} €</span>
     </div>
 
     <p style="font-size:13px;color:#9ca3af;text-align:center;margin:20px 0 0;line-height:1.4;">
@@ -251,7 +262,10 @@ export async function sendOrderInDeliveryEmail(to: string, data: any) {
   `);
 
   try {
-    await sendEmailTransport(to, `🛵 ¡Tu pedido va de camino a tu puerta! · ${data.numero_pedido} · OBENTO`, html);
+    const subject = isPendingPayment
+      ? `🛵 ¡Tu pedido va de camino! · Abonar ${totalFormatted} € al repartidor (efectivo o tarjeta) · ${data.numero_pedido} · OBENTO`
+      : `🛵 ¡Tu pedido va de camino a tu puerta! · ${data.numero_pedido} · OBENTO`;
+    await sendEmailTransport(to, subject, html);
     console.log(`✉️ Email de salida a reparto enviado con éxito a ${to} (${data.numero_pedido})`);
   } catch (err: any) {
     console.error(`⚠️ Error al enviar email de salida a reparto a ${to}:`, err.message);

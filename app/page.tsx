@@ -239,7 +239,7 @@ export default function DeliveryHomePage() {
   };
 
   const stats = useMemo(() => {
-    const entregadosHoy = historial.pedidos?.filter(p => p.estado_pedido === "entregado") || [];
+    const entregadosHoy = historial.pedidos?.filter(p => p.estado_pedido === "entregado" || p.estado_pedido === "delivery_entregado") || [];
     const totalEuros = entregadosHoy.reduce((acc, curr) => acc + (Number(curr.total) || 0), 0);
     const mediaMin = entregadosHoy.length > 0
       ? Math.round(entregadosHoy.reduce((acc, curr) => acc + (curr.tiempo_entrega_minutos || 22), 0) / entregadosHoy.length)
@@ -863,7 +863,7 @@ export default function DeliveryHomePage() {
                             </button>
 
                             <button
-                              onClick={() => handleStatusChange(p.id, "entregado")}
+                              onClick={() => handleStatusChange(p.id, "delivery_entregado")}
                               style={{
                                 height: 42,
                                 border: "none",
@@ -887,7 +887,7 @@ export default function DeliveryHomePage() {
 
                         {(isEnCamino || (!isListoParaRepartir && !isCocina)) && (
                           <button
-                            onClick={() => handleStatusChange(p.id, "entregado")}
+                            onClick={() => handleStatusChange(p.id, "delivery_entregado")}
                             style={{
                               width: "100%",
                               height: 44,

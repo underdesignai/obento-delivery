@@ -27,7 +27,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     if (estado_pedido === "en_camino") {
       updateData.fecha_salida_reparto = current.fecha_salida_reparto || new Date();
       if (repartidor_nombre) updateData.repartidor_nombre = repartidor_nombre;
-    } else if (estado_pedido === "entregado") {
+    } else if (estado_pedido === "delivery_entregado" || estado_pedido === "entregado") {
       const now = new Date();
       updateData.fecha_entregado = now;
       const start = current.fecha_salida_reparto || current.created_at || now;

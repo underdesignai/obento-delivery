@@ -166,7 +166,7 @@ export default function DeliveryHomePage() {
         const data: Pedido[] = await res.json();
         setPedidos(prev => {
           const nuevosParaSalir = data.filter(
-            p => p.estado_pedido === "listo_reparto" && !prev.some(old => old.id === p.id)
+            p => (p.estado_pedido === "listo_reparto" || p.estado_pedido === "listo") && !prev.some(old => old.id === p.id)
           );
           if (nuevosParaSalir.length > 0 && prev.length > 0) {
             playChime();
@@ -577,9 +577,9 @@ export default function DeliveryHomePage() {
               /* LISTADO DE PEDIDOS ACTIVOS GIGANTES */
               <div style={{ padding: "18px", display: "flex", flexDirection: "column", gap: 20 }}>
                 {pedidos.map(p => {
-                  const isListoParaRepartir = p.estado_pedido === "listo_reparto";
+                  const isListoParaRepartir = p.estado_pedido === "listo_reparto" || p.estado_pedido === "listo";
                   const isEnCamino = p.estado_pedido === "en_camino";
-                  const isCocina = p.estado_pedido === "en_preparacion" || p.estado_pedido === "recibido";
+                  const isCocina = p.estado_pedido === "en_preparacion" || p.estado_pedido === "recibido" || p.estado_pedido === "preparando" || p.estado_pedido === "nuevo";
                   const isPagado = p.metodo_pago === "stripe" || p.estado_pago === "pagado";
 
                   return (
@@ -885,7 +885,7 @@ export default function DeliveryHomePage() {
                           </div>
                         )}
 
-                        {isEnCamino && (
+                        {(isEnCamino || (!isListoParaRepartir && !isCocina)) && (
                           <button
                             onClick={() => handleStatusChange(p.id, "entregado")}
                             style={{

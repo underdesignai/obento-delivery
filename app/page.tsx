@@ -587,302 +587,288 @@ export default function DeliveryHomePage() {
                       key={p.id}
                       style={{
                         background: "#161311",
-                        borderRadius: 22,
+                        borderRadius: 16,
                         border: isEnCamino
-                          ? "3px solid #a855f7"
+                          ? "2px solid #a855f7"
                           : isListoParaRepartir
-                          ? "3px solid #fbbf24"
-                          : "2px solid rgba(255,255,255,0.2)",
+                          ? "2px solid #fbbf24"
+                          : "1.5px solid rgba(255,255,255,0.15)",
                         boxShadow: isEnCamino
-                          ? "0 10px 40px rgba(168,85,247,0.35)"
+                          ? "0 6px 24px rgba(168,85,247,0.25)"
                           : isListoParaRepartir
-                          ? "0 10px 40px rgba(251,191,36,0.35)"
-                          : "0 8px 30px rgba(0,0,0,0.6)",
-                        padding: "22px 18px",
+                          ? "0 6px 24px rgba(251,191,36,0.25)"
+                          : "0 4px 16px rgba(0,0,0,0.5)",
+                        padding: "12px 14px",
                         display: "flex",
                         flexDirection: "column",
-                        gap: 18
+                        gap: 10
                       }}
                     >
-                      {/* Cabecera Pedido */}
+                      {/* Cabecera Pedido Compacta */}
                       <div style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        borderBottom: "2px solid rgba(255,255,255,0.1)",
-                        paddingBottom: 14,
-                        gap: 12
+                        borderBottom: "1px solid rgba(255,255,255,0.08)",
+                        paddingBottom: 8,
+                        gap: 8
                       }}>
-                        <div>
-                          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                            <span style={{ fontFamily: "monospace", fontSize: 26, fontWeight: 900, color: "#ffffff" }}>
-                              #{p.numero_pedido}
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                          <span style={{ fontFamily: "monospace", fontSize: 21, fontWeight: 900, color: "#ffffff" }}>
+                            #{p.numero_pedido}
+                          </span>
+
+                          {isListoParaRepartir && (
+                            <span className="pulse" style={{
+                              fontSize: 11,
+                              fontWeight: 900,
+                              padding: "3px 8px",
+                              borderRadius: 8,
+                              background: "#fbbf24",
+                              color: "#000"
+                            }}>
+                              🔔 LISTO
                             </span>
+                          )}
 
-                            {isListoParaRepartir && (
-                              <span className="pulse" style={{
-                                fontSize: 14,
-                                fontWeight: 900,
-                                padding: "6px 12px",
-                                borderRadius: 16,
-                                background: "#fbbf24",
-                                color: "#000"
-                              }}>
-                                🔔 ¡LISTO PARA SALIR!
-                              </span>
-                            )}
+                          {isEnCamino && (
+                            <span style={{
+                              fontSize: 11,
+                              fontWeight: 900,
+                              padding: "3px 8px",
+                              borderRadius: 8,
+                              background: "rgba(168,85,247,0.25)",
+                              color: "#c084fc",
+                              border: "1px solid #c084fc"
+                            }}>
+                              🛵 EN REPARTO
+                            </span>
+                          )}
 
-                            {isEnCamino && (
-                              <span style={{
-                                fontSize: 14,
-                                fontWeight: 900,
-                                padding: "6px 12px",
-                                borderRadius: 16,
-                                background: "rgba(168,85,247,0.25)",
-                                color: "#c084fc",
-                                border: "1.5px solid #c084fc"
-                              }}>
-                                🛵 EN CAMINO AL CLIENTE
-                              </span>
-                            )}
+                          {isCocina && (
+                            <span style={{
+                              fontSize: 11,
+                              fontWeight: 800,
+                              padding: "3px 8px",
+                              borderRadius: 8,
+                              background: "rgba(255,255,255,0.1)",
+                              color: "#cbd5e1"
+                            }}>
+                              👨‍🍳 EN COCINA
+                            </span>
+                          )}
 
-                            {isCocina && (
-                              <span style={{
-                                fontSize: 13,
-                                fontWeight: 800,
-                                padding: "5px 12px",
-                                borderRadius: 14,
-                                background: "rgba(255,255,255,0.12)",
-                                color: "#cbd5e1"
-                              }}>
-                                👨‍🍳 EN COCINA
-                              </span>
-                            )}
-                          </div>
-
-                          <div style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", marginTop: 6 }}>
-                            Hora: {p.created_at ? new Date(p.created_at).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) : "Reciente"}
-                          </div>
+                          <span style={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>
+                            {p.created_at ? new Date(p.created_at).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) : "Reciente"}
+                          </span>
                         </div>
 
                         {/* Importe y Pago */}
-                        <div style={{ textAlign: "right" }}>
-                          <div style={{ fontSize: 32, fontWeight: 900, fontFamily: "monospace", color: "#f5efe6", lineHeight: 1 }}>
-                            {Number(p.total).toFixed(2)} €
-                          </div>
+                        <div style={{ textAlign: "right", display: "flex", alignItems: "center", gap: 8 }}>
                           <div style={{
-                            fontSize: 14,
-                            fontWeight: 900,
-                            padding: "4px 10px",
-                            borderRadius: 10,
-                            display: "inline-block",
-                            marginTop: 6,
-                            background: isPagado ? "rgba(34,197,94,0.22)" : "rgba(251,191,36,0.22)",
+                            fontSize: 11,
+                            fontWeight: 800,
+                            padding: "2px 7px",
+                            borderRadius: 6,
+                            background: isPagado ? "rgba(34,197,94,0.18)" : "rgba(251,191,36,0.18)",
                             color: isPagado ? "#4ade80" : "#fbbf24",
-                            border: isPagado ? "1.5px solid rgba(34,197,94,0.5)" : "1.5px solid rgba(251,191,36,0.5)"
+                            border: isPagado ? "1px solid rgba(34,197,94,0.4)" : "1px solid rgba(251,191,36,0.4)"
                           }}>
                             {isPagado ? "✓ PAGADO ONLINE" : "💵 COBRAR EN MANO"}
+                          </div>
+                          <div style={{ fontSize: 20, fontWeight: 900, fontFamily: "monospace", color: "#f5efe6", lineHeight: 1 }}>
+                            {Number(p.total).toFixed(2)} €
                           </div>
                         </div>
                       </div>
 
-                      {/* Bloque Destino con Google Maps */}
+                      {/* Bloque Destino con Google Maps Compacto */}
                       <div style={{
                         background: "rgba(255,255,255,0.03)",
-                        border: "2px solid rgba(200,30,34,0.5)",
-                        borderRadius: 18,
-                        padding: "18px 16px",
+                        border: "1px solid rgba(200,30,34,0.35)",
+                        borderRadius: 12,
+                        padding: "10px 12px",
                         display: "flex",
-                        flexDirection: "column",
-                        gap: 12
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 10
                       }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#c81e22", fontWeight: 900, fontSize: 14, letterSpacing: 1 }}>
-                            <MapPin size={22} />
-                            <span>DIRECCIÓN DE ENTREGA</span>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#ffffff", fontWeight: 800, fontSize: 15, lineHeight: 1.25 }}>
+                            <MapPin size={18} color="#ef4444" style={{ flexShrink: 0 }} />
+                            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                              {p.direccion_entrega || "Calle Mayor, La Ñora (Murcia)"}
+                            </span>
                           </div>
-                          <span style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", fontWeight: 700 }}>
+                          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginLeft: 24, marginTop: 2 }}>
+                            {p.direccion_detalles ? (
+                              <span style={{ color: "#fde68a", fontWeight: 600 }}>🏢 {p.direccion_detalles} · </span>
+                            ) : null}
                             CP {p.codigo_postal || "30107"} · La Ñora
-                          </span>
-                        </div>
-
-                        <div style={{ fontSize: 24, fontWeight: 900, color: "#ffffff", lineHeight: 1.3 }}>
-                          {p.direccion_entrega || "Calle Mayor, La Ñora (Murcia)"}
-                        </div>
-
-                        {p.direccion_detalles && (
-                          <div style={{
-                            background: "rgba(251,191,36,0.15)",
-                            borderLeft: "4px solid #fbbf24",
-                            padding: "10px 14px",
-                            borderRadius: 8,
-                            fontSize: 16,
-                            color: "#fde68a",
-                            fontWeight: 700
-                          }}>
-                            🏢 <strong>Piso / Detalles:</strong> {p.direccion_detalles}
                           </div>
-                        )}
+                        </div>
 
-                        {/* Botón GPS Gigante (70px alto) */}
+                        {/* Botón Google Maps */}
                         <a
                           href={getMapsUrl(p)}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{
-                            marginTop: 6,
-                            minHeight: 70,
-                            display: "flex",
+                            flexShrink: 0,
+                            height: 38,
+                            display: "inline-flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            gap: 12,
+                            gap: 6,
                             background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)",
                             color: "#ffffff",
                             textDecoration: "none",
-                            fontSize: 19,
-                            fontWeight: 900,
-                            padding: "16px 20px",
-                            borderRadius: 16,
-                            boxShadow: "0 6px 25px rgba(37,99,235,0.55)",
-                            letterSpacing: 0.5
+                            fontSize: 13,
+                            fontWeight: 800,
+                            padding: "0 12px",
+                            borderRadius: 10,
+                            boxShadow: "0 2px 10px rgba(37,99,235,0.4)"
                           }}
                         >
-                          <Navigation size={26} />
-                          <span>ABRIR EN GOOGLE MAPS (GPS)</span>
+                          <Navigation size={14} />
+                          <span>Google Maps</span>
                         </a>
                       </div>
 
-                      {/* Contacto con el Cliente */}
-                      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                        <div style={{ fontSize: 18, fontWeight: 800, color: "#ffffff" }}>
-                          👤 Cliente: <strong>{p.cliente_nombre}</strong>
+                      {/* Contacto con el Cliente: Teléfono directo + Icono WhatsApp */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 10
+                      }}>
+                        <div style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          <span style={{ color: "rgba(255,255,255,0.6)", marginRight: 4 }}>👤</span>
+                          {p.cliente_nombre}
                         </div>
 
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                          {/* Teléfono directo */}
                           <a
                             href={`tel:${p.cliente_telefono}`}
                             style={{
-                              minHeight: 62,
-                              display: "flex",
+                              height: 34,
+                              display: "inline-flex",
                               alignItems: "center",
-                              justifyContent: "center",
-                              gap: 10,
-                              padding: "12px",
-                              borderRadius: 14,
+                              gap: 6,
+                              padding: "0 10px",
+                              borderRadius: 8,
                               textDecoration: "none",
-                              fontSize: 17,
-                              fontWeight: 800,
+                              fontSize: 13,
+                              fontWeight: 700,
                               background: "rgba(255,255,255,0.08)",
-                              border: "2px solid rgba(255,255,255,0.22)",
+                              border: "1px solid rgba(255,255,255,0.2)",
                               color: "#ffffff"
                             }}
                           >
-                            <Phone size={22} color="#60a5fa" />
-                            <span>Llamar</span>
+                            <Phone size={13} color="#60a5fa" />
+                            <span>{p.cliente_telefono}</span>
                           </a>
 
+                          {/* WhatsApp: solo icono */}
                           <a
                             href={getWhatsAppUrl(p)}
                             target="_blank"
                             rel="noopener noreferrer"
+                            title="WhatsApp"
                             style={{
-                              minHeight: 62,
-                              display: "flex",
+                              width: 34,
+                              height: 34,
+                              display: "inline-flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              gap: 10,
-                              padding: "12px",
-                              borderRadius: 14,
+                              borderRadius: 8,
                               textDecoration: "none",
-                              fontSize: 17,
-                              fontWeight: 800,
                               background: "rgba(37,211,102,0.18)",
-                              border: "2px solid rgba(37,211,102,0.5)",
+                              border: "1px solid rgba(37,211,102,0.5)",
                               color: "#25d366"
                             }}
                           >
-                            <MessageCircle size={22} />
-                            <span>WhatsApp</span>
+                            <MessageCircle size={18} />
                           </a>
                         </div>
                       </div>
 
-                      {/* Notas */}
+                      {/* Notas (si existen) */}
                       {p.notas && (
                         <div style={{
                           background: "rgba(200,30,34,0.12)",
-                          borderLeft: "4px solid #c81e22",
-                          padding: "12px 14px",
-                          borderRadius: 8,
-                          fontSize: 16,
+                          borderLeft: "3px solid #c81e22",
+                          padding: "6px 10px",
+                          borderRadius: 6,
+                          fontSize: 12,
                           color: "#fca5a5"
                         }}>
                           <strong>📝 Nota:</strong> {p.notas}
                         </div>
                       )}
 
-                      {/* Mochila térmica */}
+                      {/* Mochila térmica compacta */}
                       <div style={{
-                        background: "rgba(0,0,0,0.35)",
-                        borderRadius: 14,
-                        padding: 14,
-                        border: "1.5px solid rgba(255,255,255,0.1)"
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        flexWrap: "wrap",
+                        background: "rgba(0,0,0,0.25)",
+                        borderRadius: 8,
+                        padding: "6px 8px",
+                        border: "1px solid rgba(255,255,255,0.06)"
                       }}>
-                        <div style={{ fontSize: 13, textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: 8, fontWeight: 800 }}>
-                          Verificar Mochila ({p.items?.reduce((a, b) => a + (b.cantidad || 1), 0) || 0} platos):
-                        </div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                          {(p.items || []).map((it, idx) => (
-                            <span key={idx} style={{
-                              fontSize: 15,
-                              background: "rgba(255,255,255,0.1)",
-                              border: "1px solid rgba(255,255,255,0.15)",
-                              padding: "6px 12px",
-                              borderRadius: 10,
-                              color: "#f5efe6",
-                              fontWeight: 700
-                            }}>
-                              <strong>{it.cantidad}×</strong> {it.nombre}
-                            </span>
-                          ))}
-                        </div>
+                        <span style={{ fontSize: 11, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>
+                          🎒 {p.items?.reduce((a, b) => a + (b.cantidad || 1), 0) || 0} platos:
+                        </span>
+                        {(p.items || []).map((it, idx) => (
+                          <span key={idx} style={{
+                            fontSize: 11,
+                            background: "rgba(255,255,255,0.08)",
+                            padding: "2px 6px",
+                            borderRadius: 6,
+                            color: "#f5efe6",
+                            fontWeight: 600
+                          }}>
+                            <strong style={{ color: "#ef4444" }}>{it.cantidad}×</strong> {it.nombre}
+                          </span>
+                        ))}
                       </div>
 
-                      {/* Botones de Cambio de Estado Gigantes */}
+                      {/* Botones de Cambio de Estado Compactos */}
                       <div>
                         {isListoParaRepartir && (
-                          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                             <button
                               onClick={() => handleStatusChange(p.id, "en_camino")}
                               style={{
-                                width: "100%",
-                                minHeight: 74,
+                                height: 42,
                                 border: "none",
-                                borderRadius: 16,
-                                fontSize: 19,
+                                borderRadius: 10,
+                                fontSize: 13,
                                 fontWeight: 900,
                                 cursor: "pointer",
                                 background: "linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)",
                                 color: "#ffffff",
-                                boxShadow: "0 8px 30px rgba(168,85,247,0.5)",
+                                boxShadow: "0 4px 15px rgba(168,85,247,0.35)",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: 12
+                                gap: 6
                               }}
                             >
-                              <Bike size={28} />
+                              <Bike size={18} />
                               <span>🛵 SALIR A REPARTIR</span>
                             </button>
 
                             <button
                               onClick={() => handleStatusChange(p.id, "entregado")}
                               style={{
-                                width: "100%",
-                                minHeight: 64,
+                                height: 42,
                                 border: "none",
-                                borderRadius: 16,
-                                fontSize: 18,
+                                borderRadius: 10,
+                                fontSize: 13,
                                 fontWeight: 900,
                                 cursor: "pointer",
                                 background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
@@ -890,11 +876,11 @@ export default function DeliveryHomePage() {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: 10
+                                gap: 6
                               }}
                             >
-                              <CheckCircle2 size={24} />
-                              <span>FINALIZAR ENTREGA REALIZADA</span>
+                              <CheckCircle2 size={16} />
+                              <span>FINALIZAR REPARTO</span>
                             </button>
                           </div>
                         )}
@@ -904,37 +890,37 @@ export default function DeliveryHomePage() {
                             onClick={() => handleStatusChange(p.id, "entregado")}
                             style={{
                               width: "100%",
-                              minHeight: 76,
+                              height: 44,
                               border: "none",
-                              borderRadius: 18,
-                              fontSize: 20,
+                              borderRadius: 12,
+                              fontSize: 15,
                               fontWeight: 900,
                               cursor: "pointer",
                               background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                               color: "#ffffff",
-                              boxShadow: "0 10px 35px rgba(16,185,129,0.55)",
+                              boxShadow: "0 4px 18px rgba(16,185,129,0.4)",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              gap: 12
+                              gap: 8
                             }}
                           >
-                            <CheckCircle2 size={30} />
-                            <span>✓ CONFIRMAR PEDIDO ENTREGADO</span>
+                            <CheckCircle2 size={20} />
+                            <span>✓ FINALIZAR REPARTO</span>
                           </button>
                         )}
 
                         {isCocina && (
                           <div style={{
                             textAlign: "center",
-                            padding: "16px",
+                            padding: "8px 12px",
                             background: "rgba(255,255,255,0.03)",
-                            border: "1.5px dashed rgba(255,255,255,0.15)",
-                            borderRadius: 14,
-                            fontSize: 16,
-                            color: "rgba(255,255,255,0.75)"
+                            border: "1px dashed rgba(255,255,255,0.15)",
+                            borderRadius: 10,
+                            fontSize: 12,
+                            color: "rgba(255,255,255,0.7)"
                           }}>
-                            👨‍🍳 En preparación en cocina. Sonará la alerta aquí en cuanto esté listo.
+                            👨‍🍳 En preparación en cocina. Alerta cuando esté listo.
                           </div>
                         )}
                       </div>
@@ -1276,123 +1262,114 @@ export default function DeliveryHomePage() {
               </div>
             </div>
 
-            {/* Bloque Destino con Google Maps */}
+            {/* Bloque Destino con Google Maps Compacto */}
             <div style={{
               background: "rgba(255,255,255,0.03)",
-              border: "2px solid rgba(200,30,34,0.5)",
-              borderRadius: 18,
-              padding: "18px 16px",
+              border: "1px solid rgba(200,30,34,0.35)",
+              borderRadius: 12,
+              padding: "10px 12px",
               display: "flex",
-              flexDirection: "column",
-              gap: 12
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 10
             }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#c81e22", fontWeight: 900, fontSize: 14, letterSpacing: 1 }}>
-                  <MapPin size={22} />
-                  <span>DIRECCIÓN DE ENTREGA</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#ffffff", fontWeight: 800, fontSize: 15, lineHeight: 1.25 }}>
+                  <MapPin size={18} color="#ef4444" style={{ flexShrink: 0 }} />
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {selectedHistorialPedido.direccion_entrega || "Calle Mayor, La Ñora (Murcia)"}
+                  </span>
                 </div>
-                <span style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", fontWeight: 700 }}>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginLeft: 24, marginTop: 2 }}>
+                  {selectedHistorialPedido.direccion_detalles ? (
+                    <span style={{ color: "#fde68a", fontWeight: 600 }}>🏢 {selectedHistorialPedido.direccion_detalles} · </span>
+                  ) : null}
                   CP {selectedHistorialPedido.codigo_postal || "30107"} · La Ñora
-                </span>
-              </div>
-
-              <div style={{ fontSize: 24, fontWeight: 900, color: "#ffffff", lineHeight: 1.3 }}>
-                {selectedHistorialPedido.direccion_entrega || "Calle Mayor, La Ñora (Murcia)"}
-              </div>
-
-              {selectedHistorialPedido.direccion_detalles && (
-                <div style={{
-                  background: "rgba(251,191,36,0.15)",
-                  borderLeft: "4px solid #fbbf24",
-                  padding: "10px 14px",
-                  borderRadius: 8,
-                  fontSize: 16,
-                  color: "#fde68a",
-                  fontWeight: 700
-                }}>
-                  🏢 <strong>Piso / Detalles:</strong> {selectedHistorialPedido.direccion_detalles}
                 </div>
-              )}
+              </div>
 
-              {/* Botón GPS */}
+              {/* Botón Google Maps */}
               <a
                 href={getMapsUrl(selectedHistorialPedido)}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  marginTop: 6,
-                  minHeight: 64,
-                  display: "flex",
+                  flexShrink: 0,
+                  height: 38,
+                  display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: 12,
+                  gap: 6,
                   background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)",
                   color: "#ffffff",
                   textDecoration: "none",
-                  fontSize: 18,
-                  fontWeight: 900,
-                  padding: "14px 20px",
-                  borderRadius: 16,
-                  boxShadow: "0 6px 25px rgba(37,99,235,0.55)",
-                  letterSpacing: 0.5
+                  fontSize: 13,
+                  fontWeight: 800,
+                  padding: "0 12px",
+                  borderRadius: 10,
+                  boxShadow: "0 2px 10px rgba(37,99,235,0.4)"
                 }}
               >
-                <Navigation size={24} />
-                <span>ABRIR EN GOOGLE MAPS (GPS)</span>
+                <Navigation size={14} />
+                <span>Google Maps</span>
               </a>
             </div>
 
-            {/* Contacto con el Cliente */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ fontSize: 18, fontWeight: 800, color: "#ffffff" }}>
-                👤 Cliente: <strong>{selectedHistorialPedido.cliente_nombre}</strong>
+            {/* Contacto con el Cliente: Teléfono directo + Icono WhatsApp */}
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 10
+            }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span style={{ color: "rgba(255,255,255,0.6)", marginRight: 4 }}>👤</span>
+                {selectedHistorialPedido.cliente_nombre}
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                {/* Teléfono directo */}
                 <a
                   href={`tel:${selectedHistorialPedido.cliente_telefono}`}
                   style={{
-                    minHeight: 56,
-                    display: "flex",
+                    height: 34,
+                    display: "inline-flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                    gap: 10,
-                    padding: "12px",
-                    borderRadius: 14,
+                    gap: 6,
+                    padding: "0 10px",
+                    borderRadius: 8,
                     textDecoration: "none",
-                    fontSize: 17,
-                    fontWeight: 800,
+                    fontSize: 13,
+                    fontWeight: 700,
                     background: "rgba(255,255,255,0.08)",
-                    border: "2px solid rgba(255,255,255,0.22)",
+                    border: "1px solid rgba(255,255,255,0.2)",
                     color: "#ffffff"
                   }}
                 >
-                  <Phone size={22} color="#60a5fa" />
-                  <span>Llamar</span>
+                  <Phone size={13} color="#60a5fa" />
+                  <span>{selectedHistorialPedido.cliente_telefono}</span>
                 </a>
 
+                {/* WhatsApp: solo icono */}
                 <a
                   href={getWhatsAppUrl(selectedHistorialPedido)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  title="WhatsApp"
                   style={{
-                    minHeight: 56,
-                    display: "flex",
+                    width: 34,
+                    height: 34,
+                    display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: 10,
-                    padding: "12px",
-                    borderRadius: 14,
+                    borderRadius: 8,
                     textDecoration: "none",
-                    fontSize: 17,
-                    fontWeight: 800,
                     background: "rgba(37,211,102,0.18)",
-                    border: "2px solid rgba(37,211,102,0.5)",
+                    border: "1px solid rgba(37,211,102,0.5)",
                     color: "#25d366"
                   }}
                 >
-                  <MessageCircle size={22} />
-                  <span>WhatsApp</span>
+                  <MessageCircle size={18} />
                 </a>
               </div>
             </div>

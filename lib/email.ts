@@ -4,44 +4,82 @@ import { prisma } from "./prisma";
 /**
  * Obtiene credenciales de email desde variables de entorno o desde la tabla 'configuracion' de la DB
  */
-async function getEmailCredentials() {
+async function getCredentials() {
   let from = process.env.EMAIL_FROM || "pedidos@obentojapanesefood.es";
-  let pass = process.env.EMAIL_PASSWORD || "";
+  let pass = process.env.EMAIL_PASSWORD;
+  let resendKey = process.env.RESEND_API_KEY;
 
-  if (!pass) {
+  if (!pass && !resendKey) {
     try {
-      const configItem = await prisma.configuracion.findUnique({
-        where: { clave: "email_config" }
-      });
-      if (configItem && configItem.valor) {
-        const cfg = JSON.parse(configItem.valor);
+      const row = await prisma.configuracion.findUnique({ where: { clave: "email_config" } });
+      if (row) {
+        const cfg = JSON.parse(row.valor);
         if (cfg.from) from = cfg.from;
+        if (cfg.email_from) from = cfg.email_from;
         if (cfg.password) pass = cfg.password;
+        if (cfg.resend_key) resendKey = cfg.resend_key;
+      }
+      if (!resendKey) {
+        const resendRow = await prisma.configuracion.findUnique({ where: { clave: "resend_config" } });
+        if (resendRow) {
+          const rcfg = JSON.parse(resendRow.valor);
+          if (rcfg.apiKey) resendKey = rcfg.apiKey;
+          if (rcfg.from) from = rcfg.from;
+        }
       }
     } catch {
       // Ignorar si no existe tabla o valor
     }
   }
 
-  return { from, pass };
+  return { from, pass, resendKey };
 }
 
 /**
- * Retorna el transportador de correo listo para enviar
+ * Envío de correo usando Resend API prioritario y Nodemailer de fallback
  */
-async function getTransporter() {
-  const { from, pass } = await getEmailCredentials();
-  if (!from || !pass) {
-    return { transporter: null, from };
+async function sendEmailTransport(to: string, subject: string, html: string) {
+  const { from, pass, resendKey } = await getCredentials();
+
+  // 1. Prioridad: Resend API (Directo y sin bloqueos de SMTP)
+  if (resendKey) {
+    const cleanFrom = from.includes("<") ? from : `OBENTO Japanese Food <${from}>`;
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${resendKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: cleanFrom,
+        to: [to],
+        subject,
+        html,
+      }),
+    });
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      throw new Error(`Resend API error (${res.status}): ${JSON.stringify(errJson)}`);
+    }
+    return;
   }
 
-  return {
-    transporter: nodemailer.createTransport({
+  // 2. Nodemailer SMTP / Gmail
+  if (pass) {
+    const transporter = nodemailer.createTransport({
       service: "gmail",
-      auth: { user: from, pass }
-    }),
-    from
-  };
+      auth: { user: from, pass },
+    });
+    await transporter.sendMail({
+      from: `"OBENTO Japanese Food" <${from}>`,
+      to,
+      subject,
+      html,
+    });
+    return;
+  }
+
+  console.warn(`[sendEmailTransport] No hay credenciales activas. Simulado para: ${to}`);
 }
 
 /**
@@ -126,14 +164,14 @@ function itemsTableHtml(items: any[]) {
 }
 
 /**
- * Enviar Correo Electrónico cuando el pedido SALE A REPARTO
+ * Enviar Correo Electrónico cuando el pedido SALE A REPARTO (🛵 SALIR A REPARTIR)
  */
 export async function sendOrderInDeliveryEmail(to: string, data: any) {
   if (!to) return;
-  const { transporter, from: emailFrom } = await getTransporter();
 
-  const isEfectivo = data.metodo_pago === "efectivo" || data.estado_pago === "pendiente";
+  const isEfectivo = data.metodo_pago === "efectivo" || (data.metodo_pago !== "stripe" && data.estado_pago !== "pagado");
   const rider = data.repartidor_nombre ? data.repartidor_nombre : "Nuestro repartidor";
+  const trackingUrl = `https://pedidos.obentojapanesefood.es/seguimiento?id=${data.numero_pedido}`;
 
   const html = baseEmailLayout(`
     <div style="display:inline-block;padding:6px 14px;border-radius:20px;background:rgba(192,132,252,0.15);border:1.5px solid rgba(192,132,252,0.4);color:#c084fc;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;">
@@ -141,24 +179,25 @@ export async function sendOrderInDeliveryEmail(to: string, data: any) {
     </div>
     
     <h1 style="font-size:24px;color:#f3ede0;margin:0 0 10px;font-weight:900;line-height:1.2;">
-      ¡Tu comida va de camino a tu puerta! 🍣💨
+      ¡Tu comida va en camino a tu puerta! 🍣💨
     </h1>
     
     <p style="color:#d1d5db;font-size:15px;line-height:1.5;margin:0 0 20px;">
-      Hola <strong>${data.cliente_nombre}</strong>, te informamos de que <strong>${rider}</strong> acaba de salir de nuestro restaurante con tu pedido recién elaborado y empaquetado térmicamente.
+      Hola <strong>${data.cliente_nombre}</strong>, te informamos de que <strong>${rider}</strong> acaba de salir de nuestro restaurante con tu pedido recién elaborado y empaquetado térmicamente para que llegue perfecto a tu domicilio.
     </p>
 
     <!-- Caja de Destino y Entrega -->
     <div style="background:rgba(200,30,34,0.08);border:1px solid rgba(200,30,34,0.3);border-radius:10px;padding:18px 20px;margin-bottom:20px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <span style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.15em;">NÚMERO DE PEDIDO</span>
-        <span style="font-family:monospace;font-size:22px;font-weight:900;color:#c81e22;">${data.numero_pedido}</span>
+        <span style="font-family:monospace;font-size:24px;font-weight:900;color:#c81e22;">${data.numero_pedido}</span>
       </div>
       
       <div style="font-size:14px;color:#f3ede0;border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;margin-top:6px;line-height:1.4;">
         📍 <strong>Dirección de entrega:</strong><br/>
-        <span style="color:#cbd5e1;">${data.direccion_entrega || "Dirección indicada en el pedido"}</span>
+        <span style="color:#cbd5e1;font-weight:600;">${data.direccion_entrega || "Dirección indicada en el pedido"}</span>
         ${data.direccion_detalles ? `<br/><span style="color:#9ca3af;font-size:12px;">(${data.direccion_detalles})</span>` : ""}
+        ${data.codigo_postal ? `<br/><span style="color:#9ca3af;font-size:12px;">C.P. ${data.codigo_postal}</span>` : ""}
       </div>
 
       <div style="font-size:13px;color:#d1d5db;margin-top:10px;">
@@ -166,26 +205,36 @@ export async function sendOrderInDeliveryEmail(to: string, data: any) {
       </div>
     </div>
 
-    <!-- Recordatorio de Pago si es en mano -->
+    <!-- Recordatorio de Pago si es en mano vs Online -->
     ${isEfectivo ? `
     <div style="background:rgba(251,191,36,0.1);border:1.5px solid rgba(251,191,36,0.35);border-radius:8px;padding:14px 18px;margin-bottom:22px;">
       <div style="font-size:13px;font-weight:800;color:#fbbf24;margin-bottom:4px;">
         💵 PAGO PENDIENTE EN EFECTIVO
       </div>
       <div style="font-size:13px;color:#e5e7eb;">
-        Por favor ten preparado el importe exacto o cambio para agilizar la entrega: <strong>${Number(data.total).toFixed(2).replace(".", ",")} €</strong>.
+        Por favor ten preparado el importe en efectivo para agilizar la entrega: <strong>${Number(data.total).toFixed(2).replace(".", ",")} €</strong>.
       </div>
     </div>
     ` : `
     <div style="background:rgba(34,197,94,0.1);border:1.5px solid rgba(34,197,94,0.35);border-radius:8px;padding:12px 18px;margin-bottom:22px;">
       <div style="font-size:13px;font-weight:800;color:#4ade80;">
-        ✓ PEDIDO PAGADO ONLINE
+        ✓ PEDIDO PAGADO ONLINE CON TARJETA
       </div>
-      <div style="font-size:12px;color:#d1d5db;margin-top:2px;">
+      <div style="font-size:13px;color:#d1d5db;margin-top:2px;">
         No tienes que pagar nada al repartidor. Solo recoger y disfrutar.
       </div>
     </div>
     `}
+
+    <!-- Botón de Seguimiento en Vivo -->
+    <div style="text-align:center;margin:24px 0 20px;">
+      <a href="${trackingUrl}" target="_blank" style="display:inline-block;padding:14px 28px;border-radius:8px;background:linear-gradient(135deg, #c81e22 0%, #99151b 100%);color:#ffffff;text-decoration:none;font-weight:800;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;box-shadow:0 4px 18px rgba(200,30,34,0.4);">
+        🔴 Seguir Estado del Pedido en Directo →
+      </a>
+      <p style="font-size:12px;color:#9ca3af;margin-top:10px;">
+        Haz clic para consultar los detalles y la confirmación de entrega en tiempo real.
+      </p>
+    </div>
 
     <!-- Resumen de Platos -->
     ${itemsTableHtml(data.items || data.pedido_items || [])}
@@ -201,18 +250,8 @@ export async function sendOrderInDeliveryEmail(to: string, data: any) {
     </p>
   `);
 
-  if (!transporter) {
-    console.log(`ℹ️ [Email Notificación Salida a Reparto] Para: ${to} | Asunto: Pedido en camino ${data.numero_pedido}`);
-    return;
-  }
-
   try {
-    await transporter.sendMail({
-      from: `"OBENTO Japanese Food" <${emailFrom}>`,
-      to,
-      subject: `🛵 ¡Tu pedido va en camino! · ${data.numero_pedido} · OBENTO`,
-      html
-    });
+    await sendEmailTransport(to, `🛵 ¡Tu pedido va de camino a tu puerta! · ${data.numero_pedido} · OBENTO`, html);
     console.log(`✉️ Email de salida a reparto enviado con éxito a ${to} (${data.numero_pedido})`);
   } catch (err: any) {
     console.error(`⚠️ Error al enviar email de salida a reparto a ${to}:`, err.message);

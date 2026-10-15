@@ -861,7 +861,7 @@ export default function DeliveryHomePage() {
                               }}
                             >
                               <Bike size={28} />
-                              <span>SALGO A REPARTIR (EN CAMINO)</span>
+                              <span>🛵 SALIR A REPARTIR</span>
                             </button>
 
                             <button

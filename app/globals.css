@@ -41,9 +41,12 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* OPTIMIZACIÓN APP MÓVIL (NATIVE FEEL, SIN ZOOM MANUAL) */
+/* OPTIMIZACIÓN APP MÓVIL (NATIVE FEEL, REDUCCIÓN 30% DE COMPONENTES) */
 @media (max-width: 768px) {
   html {
+    zoom: 0.7;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     overflow-x: hidden;
     touch-action: pan-x pan-y;
   }
@@ -52,6 +55,20 @@ body {
     width: 100%;
     user-select: none;
     -webkit-user-select: none;
+  }
+  .delivery-app-container {
+    max-width: 100% !important;
+    box-shadow: none !important;
+  }
+  .delivery-nav-bar {
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .delivery-modal-box {
+    max-width: 100% !important;
   }
 }
 

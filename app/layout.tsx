@@ -3,7 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://deliveryobento.flowprintcorp.com"),
+  metadataBase: new URL("https://delivery.obentojapanesefood.es"),
   title: "OBENTO · App de Reparto & Delivery",
   description: "Terminal oficial de reparto y navegación GPS para los riders de OBENTO Japanese Food.",
   manifest: "/manifest.json",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "OBENTO · App de Reparto & Delivery",
     description: "Terminal oficial de reparto y navegación GPS para los riders de OBENTO Japanese Food.",
-    url: "https://deliveryobento.flowprintcorp.com/",
+    url: "https://delivery.obentojapanesefood.es/",
     siteName: "OBENTO Delivery",
     locale: "es_ES",
     type: "website",

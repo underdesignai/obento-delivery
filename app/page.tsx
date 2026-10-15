@@ -272,7 +272,7 @@ export default function DeliveryHomePage() {
       overflowX: "hidden"
     }}>
       {/* Contenedor tipo App Móvil centrado */}
-      <div style={{
+      <div className="delivery-app-container" style={{
         width: "100%",
         maxWidth: 580,
         minHeight: "100vh",
@@ -1051,7 +1051,7 @@ export default function DeliveryHomePage() {
       </main>
 
       {/* ── BARRA INFERIOR FIJA (ESTILO APP NATIVA) ── */}
-      <nav style={{
+      <nav className="delivery-nav-bar" style={{
         position: "fixed",
         bottom: 0,
         left: "50%",
@@ -1165,6 +1165,7 @@ export default function DeliveryHomePage() {
           }}
         >
           <div
+            className="delivery-modal-box"
             onClick={(e) => e.stopPropagation()}
             style={{
               background: "#161311",

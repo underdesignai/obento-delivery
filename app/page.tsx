@@ -282,57 +282,57 @@ export default function DeliveryHomePage() {
         position: "relative",
         boxShadow: "0 0 50px rgba(0,0,0,0.8)"
       }}>
-        {/* ── CABECERA DE LA APP ── */}
+        {/* ── CABECERA DE LA APP COMPACTA ── */}
         <header style={{
           background: "#141210",
-          borderBottom: "2px solid rgba(200,30,34,0.45)",
+          borderBottom: "1.5px solid rgba(200,30,34,0.45)",
           position: "sticky",
           top: 0,
           zIndex: 50,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.85)",
+          boxShadow: "0 2px 14px rgba(0,0,0,0.85)",
           width: "100%",
-          minHeight: 70,
+          minHeight: 48,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "10px 16px"
+          padding: "6px 12px"
         }}>
         {/* Logo y Nombre */}
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{
-            width: 58,
-            height: 58,
+            width: 36,
+            height: 36,
             borderRadius: "50%",
             background: "#ffffff",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: 3,
-            boxShadow: "0 0 20px rgba(200,30,34,0.55)",
-            border: "2.5px solid #c81e22",
+            padding: 2,
+            boxShadow: "0 0 12px rgba(200,30,34,0.4)",
+            border: "1.5px solid #c81e22",
             flexShrink: 0
           }}>
-            <Image src="/images/logo-obento.png" alt="Obento" width={50} height={50} style={{ objectFit: "contain" }} priority />
+            <Image src="/images/logo-obento.png" alt="Obento" width={30} height={30} style={{ objectFit: "contain" }} priority />
           </div>
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 24, fontWeight: 900, letterSpacing: 2, color: "#ffffff", lineHeight: 1 }}>OBENTO</span>
-              <span style={{ fontSize: 13, background: "#c81e22", color: "#ffffff", padding: "3px 8px", borderRadius: 6, fontWeight: 900 }}>RIDER</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontSize: 16, fontWeight: 900, letterSpacing: 1.2, color: "#ffffff", lineHeight: 1 }}>OBENTO</span>
+              <span style={{ fontSize: 9.5, background: "#c81e22", color: "#ffffff", padding: "2px 5px", borderRadius: 4, fontWeight: 900 }}>RIDER</span>
             </div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "rgba(255,255,255,0.7)", marginTop: 4 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.7)", marginTop: 2 }}>
               {isEditingRider ? (
-                <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
                   <input
                     type="text"
                     value={tempRiderName}
                     onChange={e => setTempRiderName(e.target.value)}
-                    style={{ background: "#211e1a", border: "2px solid #c81e22", color: "#fff", padding: "4px 8px", borderRadius: 6, fontSize: 14, width: 110, outline: "none" }}
+                    style={{ background: "#211e1a", border: "1.5px solid #c81e22", color: "#fff", padding: "2px 6px", borderRadius: 4, fontSize: 11, width: 90, outline: "none" }}
                     autoFocus
                   />
-                  <button onClick={saveRider} style={{ background: "#c81e22", color: "#fff", border: "none", borderRadius: 6, padding: "4px 8px", fontSize: 13, cursor: "pointer", fontWeight: "bold" }}>OK</button>
+                  <button onClick={saveRider} style={{ background: "#c81e22", color: "#fff", border: "none", borderRadius: 4, padding: "2px 6px", fontSize: 11, cursor: "pointer", fontWeight: "bold" }}>OK</button>
                 </div>
               ) : (
-                <span onClick={() => setIsEditingRider(true)} style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 4 }} title="Toca para cambiar nombre">
+                <span onClick={() => setIsEditingRider(true)} style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }} title="Toca para cambiar nombre">
                   👤 {riderName}
                 </span>
               )}
@@ -341,29 +341,29 @@ export default function DeliveryHomePage() {
         </div>
 
         {/* Botones Derecha: Servicio y Salir */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <button
             onClick={() => setIsOnDuty(!isOnDuty)}
             style={{
               background: isOnDuty ? "rgba(34,197,94,0.2)" : "rgba(239,68,68,0.2)",
-              border: isOnDuty ? "2px solid #22c55e" : "2px solid #ef4444",
-              padding: "10px 18px",
-              borderRadius: 24,
+              border: isOnDuty ? "1.5px solid #22c55e" : "1.5px solid #ef4444",
+              padding: "5px 10px",
+              borderRadius: 16,
               display: "flex",
               alignItems: "center",
-              gap: 10,
+              gap: 6,
               cursor: "pointer",
               transition: "all 0.2s"
             }}
           >
             <span style={{
-              width: 12,
-              height: 12,
+              width: 7,
+              height: 7,
               borderRadius: "50%",
               background: isOnDuty ? "#22c55e" : "#ef4444",
-              boxShadow: isOnDuty ? "0 0 14px #22c55e" : "0 0 14px #ef4444"
+              boxShadow: isOnDuty ? "0 0 8px #22c55e" : "0 0 8px #ef4444"
             }}></span>
-            <span style={{ fontSize: 16, fontWeight: 900, color: isOnDuty ? "#4ade80" : "#fca5a5" }}>
+            <span style={{ fontSize: 11, fontWeight: 900, color: isOnDuty ? "#4ade80" : "#fca5a5" }}>
               {isOnDuty ? "EN RUTA" : "PAUSADO"}
             </span>
           </button>
@@ -373,9 +373,9 @@ export default function DeliveryHomePage() {
             title="Cerrar sesión"
             style={{
               background: "rgba(255,255,255,0.06)",
-              border: "1.5px solid rgba(255,255,255,0.15)",
-              borderRadius: 12,
-              padding: "10px 12px",
+              border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: 8,
+              padding: "5px 7px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -386,7 +386,7 @@ export default function DeliveryHomePage() {
             onMouseEnter={e => (e.currentTarget.style.color = "#ffffff")}
             onMouseLeave={e => (e.currentTarget.style.color = "#a89f8d")}
           >
-            <LogOut size={20} />
+            <LogOut size={15} />
           </button>
         </div>
       </header>
@@ -429,7 +429,7 @@ export default function DeliveryHomePage() {
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        paddingBottom: 110
+        paddingBottom: 68
       }}>
         
         {loading ? (
@@ -444,49 +444,49 @@ export default function DeliveryHomePage() {
           <div style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column" }}>
             
             {pedidos.length === 0 ? (
-              /* RADAR GIGANTE DE PANTALLA COMPLETA */
+              /* RADAR COMPACTO DE PANTALLA COMPLETA */
               <div style={{
                 flex: 1,
-                minHeight: "calc(100vh - 192px)",
+                minHeight: "calc(100vh - 120px)",
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                padding: "30px 20px",
+                padding: "16px 14px",
                 textAlign: "center",
                 position: "relative",
                 overflow: "hidden"
               }}>
                 
-                {/* ONDAS CONCÉNTRICAS DE RADAR EXTRA GRANDES (330px) */}
+                {/* ONDAS CONCÉNTRICAS DE RADAR COMPACTAS (170px) */}
                 <div style={{
                   position: "relative",
-                  width: 320,
-                  height: 320,
+                  width: 170,
+                  height: 170,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginBottom: 36
+                  marginBottom: 16
                 }}>
-                  <div className="radar-ring" style={{ width: 310, height: 310 }}></div>
-                  <div className="radar-ring" style={{ width: 310, height: 310 }}></div>
-                  <div className="radar-ring" style={{ width: 310, height: 310 }}></div>
+                  <div className="radar-ring" style={{ width: 165, height: 165 }}></div>
+                  <div className="radar-ring" style={{ width: 165, height: 165 }}></div>
+                  <div className="radar-ring" style={{ width: 165, height: 165 }}></div>
 
                   {/* Icono central de moto iluminada */}
                   <div style={{
-                    width: 130,
-                    height: 130,
+                    width: 68,
+                    height: 68,
                     borderRadius: "50%",
                     background: "radial-gradient(circle, #2d2621 0%, #161311 100%)",
-                    border: "3px solid #c81e22",
+                    border: "2px solid #c81e22",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    boxShadow: "0 0 55px rgba(200,30,34,0.65)",
+                    boxShadow: "0 0 24px rgba(200,30,34,0.55)",
                     zIndex: 2
                   }}>
-                    <Bike size={68} color="#f5efe6" />
+                    <Bike size={32} color="#f5efe6" />
                   </div>
                 </div>
 
@@ -494,53 +494,53 @@ export default function DeliveryHomePage() {
                 <div style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 10,
+                  gap: 6,
                   background: "rgba(34,197,94,0.18)",
-                  border: "2px solid rgba(34,197,94,0.45)",
-                  padding: "8px 22px",
-                  borderRadius: 28,
-                  marginBottom: 18
+                  border: "1.5px solid rgba(34,197,94,0.45)",
+                  padding: "4px 12px",
+                  borderRadius: 16,
+                  marginBottom: 10
                 }}>
-                  <span style={{ width: 12, height: 12, borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 12px #22c55e" }}></span>
-                  <span style={{ fontSize: 16, fontWeight: 900, color: "#4ade80", letterSpacing: 1, textTransform: "uppercase" }}>
+                  <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 8px #22c55e" }}></span>
+                  <span style={{ fontSize: 11, fontWeight: 900, color: "#4ade80", letterSpacing: 0.8, textTransform: "uppercase" }}>
                     RADAR EN SERVICIO
                   </span>
                 </div>
 
-                {/* Título y Subtítulo Gigantes */}
-                <h2 style={{ fontSize: 30, fontWeight: 900, color: "#ffffff", marginBottom: 14, lineHeight: 1.2 }}>
+                {/* Título y Subtítulo Compactos */}
+                <h2 style={{ fontSize: 17, fontWeight: 800, color: "#ffffff", marginBottom: 6, lineHeight: 1.25 }}>
                   Esperando pedidos de cocina
                 </h2>
 
-                <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 18, lineHeight: 1.5, maxWidth: 480, margin: "0 auto 36px" }}>
-                  Mantén tu pantalla encendida y el sonido activado. En cuanto cocina pulse <strong>"Repartir"</strong>, sonará la alarma sonora de aviso.
+                <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 12, lineHeight: 1.4, maxWidth: 300, margin: "0 auto 16px" }}>
+                  Mantén la pantalla encendida y el sonido activado. En cuanto cocina pulse <strong>"Repartir"</strong>, sonará la alarma.
                 </p>
 
-                {/* Botones Grandes de Utilidad (70px de alto) */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%", maxWidth: 440 }}>
+                {/* Botones de Utilidad Compactos */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 300 }}>
                   
                   <button
                     onClick={testAudio}
                     style={{
                       width: "100%",
-                      minHeight: 70,
-                      background: soundTested ? "rgba(34,197,94,0.25)" : "rgba(255,255,255,0.1)",
-                      border: soundTested ? "2.5px solid #22c55e" : "2px solid rgba(255,255,255,0.2)",
+                      minHeight: 44,
+                      background: soundTested ? "rgba(34,197,94,0.25)" : "rgba(255,255,255,0.08)",
+                      border: soundTested ? "1.5px solid #22c55e" : "1px solid rgba(255,255,255,0.2)",
                       color: soundTested ? "#4ade80" : "#ffffff",
-                      padding: "16px 22px",
-                      borderRadius: 18,
-                      fontSize: 19,
-                      fontWeight: 900,
+                      padding: "8px 14px",
+                      borderRadius: 10,
+                      fontSize: 12.5,
+                      fontWeight: 800,
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: 12,
+                      gap: 8,
                       transition: "all 0.2s"
                     }}
                   >
-                    <BellRing size={26} color={soundTested ? "#4ade80" : "#fbbf24"} />
-                    <span>{soundTested ? "¡Alarma Correcta! Suena Fuerte" : "🔔 Probar Alarma Sonora (Test)"}</span>
+                    <BellRing size={16} color={soundTested ? "#4ade80" : "#fbbf24"} />
+                    <span>{soundTested ? "¡Alarma Correcta! Suena Fuerte" : "🔔 Probar Alarma Sonora"}</span>
                   </button>
 
                   <button
@@ -548,29 +548,29 @@ export default function DeliveryHomePage() {
                     disabled={refreshing}
                     style={{
                       width: "100%",
-                      minHeight: 64,
+                      minHeight: 40,
                       background: "rgba(200,30,34,0.22)",
-                      border: "2px solid rgba(200,30,34,0.5)",
+                      border: "1.5px solid rgba(200,30,34,0.5)",
                       color: "#fca5a5",
-                      padding: "14px 22px",
-                      borderRadius: 18,
-                      fontSize: 18,
-                      fontWeight: 800,
+                      padding: "8px 14px",
+                      borderRadius: 10,
+                      fontSize: 12,
+                      fontWeight: 700,
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: 10
+                      gap: 8
                     }}
                   >
-                    <RefreshCw size={22} className={refreshing ? "spin" : ""} />
+                    <RefreshCw size={14} className={refreshing ? "spin" : ""} />
                     <span>{refreshing ? "Sincronizando..." : "Comprobar Pedidos Ahora"}</span>
                   </button>
                 </div>
 
-                <div style={{ marginTop: 36, fontSize: 15, color: "rgba(255,255,255,0.5)", display: "flex", alignItems: "center", gap: 8 }}>
-                  <ShieldCheck size={18} color="#4ade80" />
-                  <span>Sincronización en vivo cada 3.5s · Obento Japanese Food</span>
+                <div style={{ marginTop: 16, fontSize: 10.5, color: "rgba(255,255,255,0.45)", display: "flex", alignItems: "center", gap: 6 }}>
+                  <ShieldCheck size={14} color="#4ade80" />
+                  <span>Sincronización en vivo cada 3.5s · Obento</span>
                 </div>
               </div>
             ) : (
@@ -931,59 +931,59 @@ export default function DeliveryHomePage() {
             )}
           </div>
         ) : (
-          /* ═══════════ PESTAÑA: HISTORIAL Y RENDIMIENTO ═══════════ */
-          <div style={{ padding: "18px", display: "flex", flexDirection: "column", gap: 20 }}>
+          /* ═══════════ PESTAÑA: HISTORIAL Y RENDIMIENTO COMPACTO ═══════════ */
+          <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: 12 }}>
             
             {/* Tarjetas KPI de Resumen del Turno */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-              <div style={{ background: "#161311", border: "2px solid rgba(255,255,255,0.12)", borderRadius: 16, padding: "16px 10px", textAlign: "center" }}>
-                <div style={{ fontSize: 13, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>Entregas</div>
-                <div style={{ fontSize: 34, fontWeight: 900, fontFamily: "monospace", marginTop: 4 }}>{stats.entregadosCount}</div>
-                <div style={{ fontSize: 12, color: "#4ade80", fontWeight: 700 }}>Completadas</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+              <div style={{ background: "#161311", border: "1.5px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "10px 6px", textAlign: "center" }}>
+                <div style={{ fontSize: 10.5, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>Entregas</div>
+                <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "monospace", marginTop: 2 }}>{stats.entregadosCount}</div>
+                <div style={{ fontSize: 10.5, color: "#4ade80", fontWeight: 700 }}>Completadas</div>
               </div>
-              <div style={{ background: "#161311", border: "2px solid rgba(255,255,255,0.12)", borderRadius: 16, padding: "16px 10px", textAlign: "center" }}>
-                <div style={{ fontSize: 13, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>Media Ruta</div>
-                <div style={{ fontSize: 34, fontWeight: 900, fontFamily: "monospace", color: "#fbbf24", marginTop: 4 }}>~{stats.promedioMinutos}m</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>Por cliente</div>
+              <div style={{ background: "#161311", border: "1.5px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "10px 6px", textAlign: "center" }}>
+                <div style={{ fontSize: 10.5, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>Media Ruta</div>
+                <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "monospace", color: "#fbbf24", marginTop: 2 }}>~{stats.promedioMinutos}m</div>
+                <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.4)" }}>Por cliente</div>
               </div>
-              <div style={{ background: "#161311", border: "2px solid rgba(255,255,255,0.12)", borderRadius: 16, padding: "16px 10px", textAlign: "center" }}>
-                <div style={{ fontSize: 13, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>Recaudado</div>
-                <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "monospace", color: "#60a5fa", marginTop: 4 }}>
+              <div style={{ background: "#161311", border: "1.5px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "10px 6px", textAlign: "center" }}>
+                <div style={{ fontSize: 10.5, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>Recaudado</div>
+                <div style={{ fontSize: 19, fontWeight: 900, fontFamily: "monospace", color: "#60a5fa", marginTop: 2 }}>
                   {stats.totalFacturado.toFixed(2)}€
                 </div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>Total hoy</div>
+                <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.4)" }}>Total hoy</div>
               </div>
             </div>
 
             {/* Distribución Horaria */}
-            <div style={{ background: "#161311", border: "2px solid rgba(255,255,255,0.12)", borderRadius: 18, padding: 18 }}>
-              <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
-                <Clock size={20} color="#fbbf24" />
+            <div style={{ background: "#161311", border: "1.5px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: 12 }}>
+              <h3 style={{ fontSize: 13.5, fontWeight: 800, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                <Clock size={15} color="#fbbf24" />
                 <span>Horas de Reparto</span>
               </h3>
               <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 15, textAlign: "left" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, textAlign: "left" }}>
                   <thead>
-                    <tr style={{ background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.5)", fontSize: 13, textTransform: "uppercase" }}>
-                      <th style={{ padding: "12px 10px" }}>Hora</th>
-                      <th style={{ padding: "12px 10px" }}>Pedidos</th>
-                      <th style={{ padding: "12px 10px" }}>Media</th>
-                      <th style={{ padding: "12px 10px" }}>Total</th>
+                    <tr style={{ background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.5)", fontSize: 10.5, textTransform: "uppercase" }}>
+                      <th style={{ padding: "8px 6px" }}>Hora</th>
+                      <th style={{ padding: "8px 6px" }}>Pedidos</th>
+                      <th style={{ padding: "8px 6px" }}>Media</th>
+                      <th style={{ padding: "8px 6px" }}>Total</th>
                     </tr>
                   </thead>
                   <tbody>
                     {(historial.porHora || []).length > 0 ? (
                       historial.porHora.map((h, i) => (
                         <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                          <td style={{ padding: 12, fontWeight: 700 }}>{String(h.hora).padStart(2, "0")}:00</td>
-                          <td style={{ padding: 12 }}>{h.total_pedidos}</td>
-                          <td style={{ padding: 12, color: "#fbbf24", fontWeight: 700 }}>{h.promedio_minutos}m</td>
-                          <td style={{ padding: 12, fontWeight: 700 }}>{Number(h.total_facturado).toFixed(2)} €</td>
+                          <td style={{ padding: "7px 6px", fontWeight: 700 }}>{String(h.hora).padStart(2, "0")}:00</td>
+                          <td style={{ padding: "7px 6px" }}>{h.total_pedidos}</td>
+                          <td style={{ padding: "7px 6px", color: "#fbbf24", fontWeight: 700 }}>{h.promedio_minutos}m</td>
+                          <td style={{ padding: "7px 6px", fontWeight: 700 }}>{Number(h.total_facturado).toFixed(2)} €</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={4} style={{ textAlign: "center", padding: 24, color: "rgba(255,255,255,0.4)" }}>Sin actividad registrada hoy.</td>
+                        <td colSpan={4} style={{ textAlign: "center", padding: 16, color: "rgba(255,255,255,0.4)" }}>Sin actividad registrada hoy.</td>
                       </tr>
                     )}
                   </tbody>
@@ -992,11 +992,11 @@ export default function DeliveryHomePage() {
             </div>
 
             {/* Listado de Entregas */}
-            <div style={{ background: "#161311", border: "2px solid rgba(255,255,255,0.12)", borderRadius: 18, padding: 18 }}>
-              <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 14 }}>📋 Últimas Entregas</h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ background: "#161311", border: "1.5px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: 12 }}>
+              <h3 style={{ fontSize: 13.5, fontWeight: 800, marginBottom: 10 }}>📋 Últimas Entregas</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {(historial.pedidos || []).length === 0 ? (
-                  <div style={{ textAlign: "center", padding: "24px 0", color: "rgba(255,255,255,0.4)" }}>No hay registros de entrega anteriores.</div>
+                  <div style={{ textAlign: "center", padding: "16px 0", color: "rgba(255,255,255,0.4)", fontSize: 12 }}>No hay registros de entrega anteriores.</div>
                 ) : (
                     (historial.pedidos || []).map((p, idx) => (
                     <div
@@ -1004,12 +1004,12 @@ export default function DeliveryHomePage() {
                       onClick={() => setSelectedHistorialPedido(p)}
                       style={{
                         background: "rgba(255,255,255,0.03)",
-                        border: "1.5px solid rgba(255,255,255,0.1)",
-                        borderRadius: 14,
-                        padding: 16,
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: 10,
+                        padding: "10px 12px",
                         display: "flex",
                         flexDirection: "column",
-                        gap: 8,
+                        gap: 6,
                         cursor: "pointer",
                         transition: "all 0.15s ease",
                         position: "relative"
@@ -1017,28 +1017,26 @@ export default function DeliveryHomePage() {
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background = "rgba(255,255,255,0.07)";
                         e.currentTarget.style.borderColor = "#c81e22";
-                        e.currentTarget.style.transform = "translateY(-1px)";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.background = "rgba(255,255,255,0.03)";
                         e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-                        e.currentTarget.style.transform = "translateY(0)";
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ fontFamily: "monospace", fontWeight: 900, color: "#c81e22", fontSize: 18 }}>#{p.numero_pedido}</span>
-                        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.45)" }}>
+                        <span style={{ fontFamily: "monospace", fontWeight: 900, color: "#c81e22", fontSize: 15 }}>#{p.numero_pedido}</span>
+                        <span style={{ fontSize: 11, color: "rgba(255,255,255,0.45)" }}>
                           {p.created_at ? new Date(p.created_at).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) : ""}
                         </span>
-                        <span style={{ fontWeight: 900, fontFamily: "monospace", fontSize: 20 }}>{Number(p.total).toFixed(2)} €</span>
+                        <span style={{ fontWeight: 900, fontFamily: "monospace", fontSize: 16 }}>{Number(p.total).toFixed(2)} €</span>
                       </div>
-                      <div style={{ fontWeight: 700, fontSize: 16 }}>👤 {p.cliente_nombre} ({p.cliente_telefono})</div>
-                      <div style={{ fontSize: 15, color: "rgba(255,255,255,0.7)" }}>📍 {p.direccion_entrega} {p.direccion_detalles ? `(${p.direccion_detalles})` : ""}</div>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13.5, borderTop: "1px dashed rgba(255,255,255,0.08)", paddingTop: 8, marginTop: 4 }}>
+                      <div style={{ fontWeight: 700, fontSize: 13 }}>👤 {p.cliente_nombre} ({p.cliente_telefono})</div>
+                      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)" }}>📍 {p.direccion_entrega} {p.direccion_detalles ? `(${p.direccion_detalles})` : ""}</div>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 11.5, borderTop: "1px dashed rgba(255,255,255,0.08)", paddingTop: 6, marginTop: 2 }}>
                         <span>Rider: <strong>{p.repartidor_nombre || riderName}</strong></span>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                           <span style={{ color: "#4ade80", fontWeight: 800 }}>⏱️ {p.tiempo_entrega_minutos ? `${p.tiempo_entrega_minutos} min` : "Entregado"}</span>
-                          <span style={{ fontSize: 12, color: "#60a5fa", fontWeight: 700, background: "rgba(96,165,250,0.15)", padding: "2px 8px", borderRadius: 6 }}>Ver detalles ›</span>
+                          <span style={{ fontSize: 11, color: "#60a5fa", fontWeight: 700, background: "rgba(96,165,250,0.15)", padding: "2px 6px", borderRadius: 4 }}>Detalles ›</span>
                         </div>
                       </div>
                     </div>
@@ -1050,7 +1048,7 @@ export default function DeliveryHomePage() {
         )}
       </main>
 
-      {/* ── BARRA INFERIOR FIJA (ESTILO APP NATIVA) ── */}
+      {/* ── BARRA INFERIOR FIJA COMPACTA (ESTILO APP NATIVA) ── */}
       <nav className="delivery-nav-bar" style={{
         position: "fixed",
         bottom: 0,
@@ -1058,92 +1056,92 @@ export default function DeliveryHomePage() {
         transform: "translateX(-50%)",
         width: "100%",
         maxWidth: 580,
-        minHeight: 74,
+        minHeight: 52,
         background: "#110f0d",
-        borderTop: "2px solid rgba(200,30,34,0.45)",
+        borderTop: "1.5px solid rgba(200,30,34,0.45)",
         zIndex: 100,
-        boxShadow: "0 -8px 30px rgba(0,0,0,0.9)",
-        paddingBottom: "max(12px, env(safe-area-inset-bottom))"
+        boxShadow: "0 -4px 20px rgba(0,0,0,0.9)",
+        paddingBottom: "max(6px, env(safe-area-inset-bottom))"
       }}>
-        <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "8px 0 2px" }}>
+        <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "4px 0 2px" }}>
           
           {/* Pestaña 1: Repartos Activos */}
           <button
             onClick={() => setActiveTab("activos")}
             style={{
-              padding: "8px 4px",
+              padding: "4px 2px",
               background: "transparent",
               border: "none",
               cursor: "pointer",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 6,
+              gap: 3,
               color: activeTab === "activos" ? "#c81e22" : "rgba(255,255,255,0.5)"
             }}
           >
             <div style={{ position: "relative" }}>
-              <Bike size={30} />
+              <Bike size={19} />
               {pedidos.length > 0 && (
                 <span style={{
                   position: "absolute",
-                  top: -8,
-                  right: -12,
+                  top: -6,
+                  right: -10,
                   background: "#c81e22",
                   color: "#fff",
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: 900,
-                  width: 22,
-                  height: 22,
+                  width: 17,
+                  height: 17,
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: "0 0 10px #c81e22"
+                  boxShadow: "0 0 8px #c81e22"
                 }}>
                   {pedidos.length}
                 </span>
               )}
             </div>
-            <span style={{ fontSize: 14, fontWeight: 900 }}>Repartos</span>
+            <span style={{ fontSize: 10.5, fontWeight: 800 }}>Repartos</span>
           </button>
 
           {/* Pestaña 2: Historial */}
           <button
             onClick={() => { setActiveTab("historial"); fetchHistorial(); }}
             style={{
-              padding: "8px 4px",
+              padding: "4px 2px",
               background: "transparent",
               border: "none",
               cursor: "pointer",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 6,
+              gap: 3,
               color: activeTab === "historial" ? "#c81e22" : "rgba(255,255,255,0.5)"
             }}
           >
-            <History size={30} />
-            <span style={{ fontSize: 14, fontWeight: 900 }}>Historial</span>
+            <History size={19} />
+            <span style={{ fontSize: 10.5, fontWeight: 800 }}>Historial</span>
           </button>
 
           {/* Pestaña 3: Alarma */}
           <button
             onClick={() => setAudioEnabled(!audioEnabled)}
             style={{
-              padding: "8px 4px",
+              padding: "4px 2px",
               background: "transparent",
               border: "none",
               cursor: "pointer",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 6,
+              gap: 3,
               color: audioEnabled ? "#4ade80" : "#ef4444"
             }}
           >
-            {audioEnabled ? <Volume2 size={30} /> : <VolumeX size={30} />}
-            <span style={{ fontSize: 14, fontWeight: 900 }}>{audioEnabled ? "Alarma ON" : "Silencio"}</span>
+            {audioEnabled ? <Volume2 size={19} /> : <VolumeX size={19} />}
+            <span style={{ fontSize: 10.5, fontWeight: 800 }}>{audioEnabled ? "Alarma ON" : "Silencio"}</span>
           </button>
         </div>
       </nav>
@@ -1169,18 +1167,18 @@ export default function DeliveryHomePage() {
             onClick={(e) => e.stopPropagation()}
             style={{
               background: "#161311",
-              border: "2px solid #eab308",
+              border: "1.5px solid #eab308",
               borderBottom: "none",
-              borderRadius: "24px 24px 0 0",
+              borderRadius: "18px 18px 0 0",
               width: "100%",
-              maxWidth: 640,
-              maxHeight: "92vh",
+              maxWidth: 580,
+              maxHeight: "90vh",
               overflowY: "auto",
-              padding: "24px 20px 36px",
+              padding: "16px 14px 24px",
               display: "flex",
               flexDirection: "column",
-              gap: 18,
-              boxShadow: "0 -10px 50px rgba(0,0,0,0.9)",
+              gap: 12,
+              boxShadow: "0 -8px 40px rgba(0,0,0,0.9)",
               color: "#ffffff"
             }}
           >
@@ -1189,55 +1187,55 @@ export default function DeliveryHomePage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              borderBottom: "2px solid rgba(255,255,255,0.1)",
-              paddingBottom: 14,
-              gap: 12
+              borderBottom: "1px solid rgba(255,255,255,0.1)",
+              paddingBottom: 10,
+              gap: 8
             }}>
               <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                  <span style={{ fontFamily: "monospace", fontSize: 26, fontWeight: 900, color: "#ffffff" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                  <span style={{ fontFamily: "monospace", fontSize: 20, fontWeight: 900, color: "#ffffff" }}>
                     #{selectedHistorialPedido.numero_pedido}
                   </span>
                   <span style={{
-                    fontSize: 14,
+                    fontSize: 11,
                     fontWeight: 900,
-                    padding: "4px 10px",
-                    borderRadius: 14,
+                    padding: "3px 8px",
+                    borderRadius: 10,
                     background: selectedHistorialPedido.estado_pedido === "entregado"
                       ? "rgba(34,197,94,0.22)"
                       : "#fbbf24",
                     color: selectedHistorialPedido.estado_pedido === "entregado" ? "#4ade80" : "#000",
                     border: selectedHistorialPedido.estado_pedido === "entregado"
-                      ? "1.5px solid rgba(34,197,94,0.5)"
+                      ? "1px solid rgba(34,197,94,0.5)"
                       : "none"
                   }}>
                     {selectedHistorialPedido.estado_pedido === "entregado" ? "✓ ENTREGADO" : "🔔 ¡LISTO PARA SALIR!"}
                   </span>
                 </div>
-                <div style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", marginTop: 6 }}>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", marginTop: 4 }}>
                   Hora: {selectedHistorialPedido.created_at ? new Date(selectedHistorialPedido.created_at).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) : "Reciente"}
                 </div>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 30, fontWeight: 900, fontFamily: "monospace", color: "#f5efe6", lineHeight: 1 }}>
+                  <div style={{ fontSize: 22, fontWeight: 900, fontFamily: "monospace", color: "#f5efe6", lineHeight: 1 }}>
                     {Number(selectedHistorialPedido.total).toFixed(2)} €
                   </div>
                   <div style={{
-                    fontSize: 13,
+                    fontSize: 10.5,
                     fontWeight: 900,
-                    padding: "3px 8px",
-                    borderRadius: 8,
+                    padding: "2px 6px",
+                    borderRadius: 6,
                     display: "inline-block",
-                    marginTop: 4,
+                    marginTop: 2,
                     background: selectedHistorialPedido.estado_pago === "pagado" || selectedHistorialPedido.metodo_pago === "stripe"
                       ? "rgba(34,197,94,0.22)"
                       : "rgba(251,191,36,0.22)",
                     color: selectedHistorialPedido.estado_pago === "pagado" || selectedHistorialPedido.metodo_pago === "stripe"
                       ? "#4ade80"
                       : "#fbbf24",
-                    border: "1px solid rgba(255,255,255,0.2)"
+                    border: "1px solid rgba(255,255,255,0.15)"
                   }}>
                     {selectedHistorialPedido.estado_pago === "pagado" || selectedHistorialPedido.metodo_pago === "stripe" ? "✓ PAGADO ONLINE" : "💵 COBRAR EN MANO"}
                   </div>
@@ -1249,8 +1247,8 @@ export default function DeliveryHomePage() {
                     background: "rgba(255,255,255,0.1)",
                     border: "none",
                     borderRadius: "50%",
-                    width: 38,
-                    height: 38,
+                    width: 32,
+                    height: 32,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -1258,7 +1256,7 @@ export default function DeliveryHomePage() {
                     cursor: "pointer"
                   }}
                 >
-                  <X size={22} />
+                  <X size={18} />
                 </button>
               </div>
             </div>
@@ -1267,21 +1265,21 @@ export default function DeliveryHomePage() {
             <div style={{
               background: "rgba(255,255,255,0.03)",
               border: "1px solid rgba(200,30,34,0.35)",
-              borderRadius: 12,
-              padding: "10px 12px",
+              borderRadius: 10,
+              padding: "8px 10px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              gap: 10
+              gap: 8
             }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#ffffff", fontWeight: 800, fontSize: 15, lineHeight: 1.25 }}>
-                  <MapPin size={18} color="#ef4444" style={{ flexShrink: 0 }} />
+                <div style={{ display: "flex", alignItems: "center", gap: 5, color: "#ffffff", fontWeight: 800, fontSize: 13.5, lineHeight: 1.25 }}>
+                  <MapPin size={15} color="#ef4444" style={{ flexShrink: 0 }} />
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {selectedHistorialPedido.direccion_entrega || "Calle Mayor, La Ñora (Murcia)"}
                   </span>
                 </div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginLeft: 24, marginTop: 2 }}>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", marginLeft: 20, marginTop: 2 }}>
                   {selectedHistorialPedido.direccion_detalles ? (
                     <span style={{ color: "#fde68a", fontWeight: 600 }}>🏢 {selectedHistorialPedido.direccion_detalles} · </span>
                   ) : null}
@@ -1296,23 +1294,23 @@ export default function DeliveryHomePage() {
                 rel="noopener noreferrer"
                 style={{
                   flexShrink: 0,
-                  height: 38,
+                  height: 32,
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: 6,
+                  gap: 5,
                   background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)",
                   color: "#ffffff",
                   textDecoration: "none",
-                  fontSize: 13,
+                  fontSize: 11.5,
                   fontWeight: 800,
-                  padding: "0 12px",
-                  borderRadius: 10,
-                  boxShadow: "0 2px 10px rgba(37,99,235,0.4)"
+                  padding: "0 10px",
+                  borderRadius: 8,
+                  boxShadow: "0 2px 8px rgba(37,99,235,0.3)"
                 }}
               >
-                <Navigation size={14} />
-                <span>Google Maps</span>
+                <Navigation size={12} />
+                <span>Maps</span>
               </a>
             </div>
 
@@ -1321,33 +1319,33 @@ export default function DeliveryHomePage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              gap: 10
+              gap: 8
             }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: "#ffffff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#ffffff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 <span style={{ color: "rgba(255,255,255,0.6)", marginRight: 4 }}>👤</span>
                 {selectedHistorialPedido.cliente_nombre}
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
                 {/* Teléfono directo */}
                 <a
                   href={`tel:${selectedHistorialPedido.cliente_telefono}`}
                   style={{
-                    height: 34,
+                    height: 30,
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: 6,
-                    padding: "0 10px",
-                    borderRadius: 8,
+                    gap: 5,
+                    padding: "0 8px",
+                    borderRadius: 6,
                     textDecoration: "none",
-                    fontSize: 13,
+                    fontSize: 11.5,
                     fontWeight: 700,
                     background: "rgba(255,255,255,0.08)",
                     border: "1px solid rgba(255,255,255,0.2)",
                     color: "#ffffff"
                   }}
                 >
-                  <Phone size={13} color="#60a5fa" />
+                  <Phone size={12} color="#60a5fa" />
                   <span>{selectedHistorialPedido.cliente_telefono}</span>
                 </a>
 
@@ -1358,19 +1356,19 @@ export default function DeliveryHomePage() {
                   rel="noopener noreferrer"
                   title="WhatsApp"
                   style={{
-                    width: 34,
-                    height: 34,
+                    width: 30,
+                    height: 30,
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    borderRadius: 8,
+                    borderRadius: 6,
                     textDecoration: "none",
                     background: "rgba(37,211,102,0.18)",
                     border: "1px solid rgba(37,211,102,0.5)",
                     color: "#25d366"
                   }}
                 >
-                  <MessageCircle size={18} />
+                  <MessageCircle size={15} />
                 </a>
               </div>
             </div>
@@ -1379,10 +1377,10 @@ export default function DeliveryHomePage() {
             {selectedHistorialPedido.notas && (
               <div style={{
                 background: "rgba(200,30,34,0.12)",
-                borderLeft: "4px solid #c81e22",
-                padding: "12px 14px",
-                borderRadius: 8,
-                fontSize: 16,
+                borderLeft: "3px solid #c81e22",
+                padding: "8px 10px",
+                borderRadius: 6,
+                fontSize: 12,
                 color: "#fca5a5"
               }}>
                 <strong>📝 Nota:</strong> {selectedHistorialPedido.notas}
@@ -1392,21 +1390,21 @@ export default function DeliveryHomePage() {
             {/* Mochila térmica / Platos */}
             <div style={{
               background: "rgba(0,0,0,0.35)",
-              borderRadius: 14,
-              padding: 14,
-              border: "1.5px solid rgba(255,255,255,0.1)"
+              borderRadius: 10,
+              padding: 10,
+              border: "1px solid rgba(255,255,255,0.1)"
             }}>
-              <div style={{ fontSize: 13, textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: 8, fontWeight: 800 }}>
+              <div style={{ fontSize: 11, textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: 6, fontWeight: 800 }}>
                 Verificar Mochila ({selectedHistorialPedido.items?.reduce((a, b) => a + (b.cantidad || 1), 0) || 0} platos):
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                 {(selectedHistorialPedido.items || []).map((it, idx) => (
                   <span key={idx} style={{
-                    fontSize: 15,
+                    fontSize: 12,
                     background: "rgba(255,255,255,0.1)",
                     border: "1px solid rgba(255,255,255,0.15)",
-                    padding: "6px 12px",
-                    borderRadius: 10,
+                    padding: "4px 8px",
+                    borderRadius: 8,
                     color: "#f5efe6",
                     fontWeight: 700
                   }}>
@@ -1417,7 +1415,7 @@ export default function DeliveryHomePage() {
             </div>
 
             {/* Botones de acción / Reabrir o reactivar pedido */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 4 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 2 }}>
               <button
                 onClick={async () => {
                   await handleStatusChange(selectedHistorialPedido.id, "en_camino");
@@ -1426,22 +1424,22 @@ export default function DeliveryHomePage() {
                 }}
                 style={{
                   width: "100%",
-                  minHeight: 64,
+                  minHeight: 44,
                   border: "none",
-                  borderRadius: 16,
-                  fontSize: 18,
+                  borderRadius: 10,
+                  fontSize: 13,
                   fontWeight: 900,
                   cursor: "pointer",
                   background: "linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)",
                   color: "#ffffff",
-                  boxShadow: "0 8px 25px rgba(168,85,247,0.45)",
+                  boxShadow: "0 4px 15px rgba(168,85,247,0.35)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: 12
+                  gap: 8
                 }}
               >
-                <Bike size={26} />
+                <Bike size={18} />
                 <span>↺ REABRIR PEDIDO Y PONER EN CAMINO</span>
               </button>
 
@@ -1453,10 +1451,10 @@ export default function DeliveryHomePage() {
                 }}
                 style={{
                   width: "100%",
-                  minHeight: 54,
+                  minHeight: 38,
                   border: "1.5px solid rgba(251,191,36,0.6)",
-                  borderRadius: 14,
-                  fontSize: 16,
+                  borderRadius: 10,
+                  fontSize: 12,
                   fontWeight: 800,
                   cursor: "pointer",
                   background: "rgba(251,191,36,0.15)",
@@ -1464,10 +1462,10 @@ export default function DeliveryHomePage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: 10
+                  gap: 6
                 }}
               >
-                <RefreshCw size={20} />
+                <RefreshCw size={15} />
                 <span>Volver a dejar "Listo para salir"</span>
               </button>
             </div>

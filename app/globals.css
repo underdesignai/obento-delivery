@@ -41,10 +41,9 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* OPTIMIZACIÓN APP MÓVIL (NATIVE FEEL, REDUCCIÓN 30% DE COMPONENTES) */
+/* OPTIMIZACIÓN APP MÓVIL (NATIVE FEEL COMPACTO) */
 @media (max-width: 768px) {
   html {
-    zoom: 0.7;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     overflow-x: hidden;

@@ -5,33 +5,20 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://delivery.obentojapanesefood.es"),
   title: "OBENTO · App de Reparto & Delivery",
-  description: "Terminal oficial de reparto y navegación GPS para los riders de OBENTO Japanese Food.",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
   manifest: "/manifest.json",
   icons: {
     icon: "/images/logo-obento.png",
     apple: "/images/logo-obento.png",
-  },
-  openGraph: {
-    title: "OBENTO · App de Reparto & Delivery",
-    description: "Terminal oficial de reparto y navegación GPS para los riders de OBENTO Japanese Food.",
-    url: "https://delivery.obentojapanesefood.es/",
-    siteName: "OBENTO Delivery",
-    locale: "es_ES",
-    type: "website",
-    images: [
-      {
-        url: "https://deliveryobento.flowprintcorp.com/images/logo-obento.png",
-        width: 800,
-        height: 800,
-        alt: "Obento Japanese Food",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "OBENTO · App de Reparto & Delivery",
-    description: "Terminal oficial de reparto y navegación GPS para los riders de OBENTO Japanese Food.",
-    images: ["https://deliveryobento.flowprintcorp.com/images/logo-obento.png"],
   },
   appleWebApp: {
     capable: true,
@@ -58,17 +45,13 @@ export default function RootLayout({
     <html lang="es" className="dark">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />
+        <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+        <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Obento Rider" />
         <link rel="apple-touch-icon" href="/images/logo-obento.png" />
-        <meta property="og:title" content="OBENTO · App de Reparto & Delivery" />
-        <meta property="og:description" content="Terminal oficial de reparto y navegación GPS para los riders de OBENTO Japanese Food." />
-        <meta property="og:image" content="https://deliveryobento.flowprintcorp.com/images/logo-obento.png" />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="800" />
-        <meta property="og:url" content="https://deliveryobento.flowprintcorp.com/" />
-        <meta property="og:type" content="website" />
       </head>
       <body>
         {children}

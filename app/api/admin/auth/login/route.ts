@@ -6,8 +6,8 @@ export async function POST(req: Request) {
   try {
     const { user, password } = await req.json();
 
-    const expectedUser = process.env.ADMIN_USER || "admin";
-    const expectedPassword = process.env.ADMIN_PASSWORD || "45014501";
+    const expectedUser = process.env.ADMIN_USER || "kini";
+    const expectedPassword = process.env.ADMIN_PASSWORD || "kalaykassia";
 
     if (user === expectedUser && password === expectedPassword) {
       const token = await new SignJWT({ sub: user, role: "admin", username: user })

@@ -179,7 +179,7 @@ export default function LoginPage() {
               type="text"
               value={user}
               onChange={e => setUser(e.target.value)}
-              placeholder="admin"
+              placeholder="kini"
               autoComplete="username"
               required
               autoFocus

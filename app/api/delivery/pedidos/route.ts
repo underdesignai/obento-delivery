@@ -4,8 +4,10 @@ export async function GET() {
   try {
     const pedidos = await prisma.pedidos.findMany({
       where: {
-        tipo_entrega: { in: ["domicilio", "delivery"] },
-        estado_pedido: { in: ["listo_reparto", "en_camino", "listo", "en_preparacion"] }
+        tipo_entrega: { in: ["domicilio", "delivery", "Domicilio", "Delivery"] },
+        estado_pedido: {
+          notIn: ["entregado", "delivery_entregado", "cancelado", "rechazado", "Entregado", "Cancelado"]
+        }
       },
       include: {
         pedido_items: true

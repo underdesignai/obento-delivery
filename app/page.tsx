@@ -21,7 +21,9 @@ import {
   PackageCheck,
   Download,
   X,
-  LogOut
+  LogOut,
+  ChefHat,
+  Flame
 } from "lucide-react";
 
 type ItemPedido = {
@@ -64,7 +66,7 @@ type HistorialData = {
 };
 
 export default function DeliveryHomePage() {
-  const [activeTab, setActiveTab] = useState<"activos" | "historial">("activos");
+  const [activeTab, setActiveTab] = useState<"activos" | "preparacion" | "historial">("activos");
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const [historial, setHistorial] = useState<HistorialData>({ pedidos: [], porHora: [], porDia: [] });
   const [loading, setLoading] = useState(true);
@@ -76,6 +78,20 @@ export default function DeliveryHomePage() {
   const [tempRiderName, setTempRiderName] = useState("");
   const [soundTested, setSoundTested] = useState(false);
   const [selectedHistorialPedido, setSelectedHistorialPedido] = useState<Pedido | null>(null);
+
+  // Separación de pedidos para Repartos (Listos / En Camino) y Pedidos en Preparación (Cocina / Entrada)
+  const pedidosActivos = useMemo(() => {
+    return pedidos.filter(
+      p => p.estado_pedido === "listo_reparto" || p.estado_pedido === "listo" || p.estado_pedido === "en_camino" || p.estado_pedido === "en_reparto"
+    );
+  }, [pedidos]);
+
+  const pedidosPreparacion = useMemo(() => {
+    return pedidos.filter(
+      p => p.estado_pedido !== "listo_reparto" && p.estado_pedido !== "listo" && p.estado_pedido !== "en_camino" && p.estado_pedido !== "en_reparto"
+    );
+  }, [pedidos]);
+
   
   // PWA Install Prompt State
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -166,7 +182,8 @@ export default function DeliveryHomePage() {
         const data: Pedido[] = await res.json();
         setPedidos(prev => {
           const nuevosParaSalir = data.filter(
-            p => (p.estado_pedido === "listo_reparto" || p.estado_pedido === "listo") && !prev.some(old => old.id === p.id)
+            p => (p.estado_pedido === "listo_reparto" || p.estado_pedido === "listo") &&
+                 !prev.some(old => old.id === p.id && (old.estado_pedido === "listo_reparto" || old.estado_pedido === "listo"))
           );
           if (nuevosParaSalir.length > 0 && prev.length > 0) {
             playChime();
@@ -443,7 +460,7 @@ export default function DeliveryHomePage() {
           /* ═══════════ PESTAÑA: PEDIDOS ACTIVOS ═══════════ */
           <div style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column" }}>
             
-            {pedidos.length === 0 ? (
+            {pedidosActivos.length === 0 ? (
               /* RADAR COMPACTO DE PANTALLA COMPLETA */
               <div style={{
                 flex: 1,
@@ -508,6 +525,38 @@ export default function DeliveryHomePage() {
                 </div>
 
                 {/* Título y Subtítulo Compactos */}
+                {pedidosPreparacion.length > 0 && (
+                  <div
+                    onClick={() => setActiveTab("preparacion")}
+                    style={{
+                      background: "rgba(245,158,11,0.14)",
+                      border: "1.5px solid rgba(245,158,11,0.5)",
+                      borderRadius: 12,
+                      padding: "8px 12px",
+                      marginBottom: 12,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      maxWidth: 310,
+                      width: "100%",
+                      textAlign: "left",
+                      boxShadow: "0 2px 10px rgba(245,158,11,0.15)"
+                    }}
+                  >
+                    <ChefHat size={22} color="#fbbf24" style={{ flexShrink: 0 }} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 12, fontWeight: 900, color: "#fbbf24" }}>
+                        {pedidosPreparacion.length} pedido{pedidosPreparacion.length > 1 ? "s" : ""} de reparto en preparación
+                      </div>
+                      <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.75)" }}>
+                        Toca para ver los pedidos elaborándose
+                      </div>
+                    </div>
+                    <span style={{ fontSize: 14, color: "#fbbf24", fontWeight: 900 }}>→</span>
+                  </div>
+                )}
+
                 <h2 style={{ fontSize: 17, fontWeight: 800, color: "#ffffff", marginBottom: 6, lineHeight: 1.25 }}>
                   Esperando pedidos de cocina
                 </h2>
@@ -576,7 +625,7 @@ export default function DeliveryHomePage() {
             ) : (
               /* LISTADO DE PEDIDOS ACTIVOS GIGANTES */
               <div style={{ padding: "18px", display: "flex", flexDirection: "column", gap: 20 }}>
-                {pedidos.map(p => {
+                {pedidosActivos.map(p => {
                   const isListoParaRepartir = p.estado_pedido === "listo_reparto" || p.estado_pedido === "listo";
                   const isEnCamino = p.estado_pedido === "en_camino";
                   const isCocina = p.estado_pedido === "en_preparacion" || p.estado_pedido === "recibido" || p.estado_pedido === "preparando" || p.estado_pedido === "nuevo";
@@ -930,6 +979,377 @@ export default function DeliveryHomePage() {
               </div>
             )}
           </div>
+        ) : activeTab === "preparacion" ? (
+          
+          /* ═══════════ PESTAÑA: PEDIDOS EN PREPARACIÓN (EXCLUSIVO REPARTO) ═══════════ */
+          <div style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column" }}>
+            
+            {/* Cabecera de la sección En Preparación */}
+            <div style={{
+              padding: "10px 14px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderBottom: "1px solid rgba(255,255,255,0.08)",
+              background: "rgba(245,158,11,0.06)"
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 8,
+                  background: "rgba(245,158,11,0.2)",
+                  border: "1.5px solid rgba(245,158,11,0.5)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <ChefHat size={18} color="#fbbf24" />
+                </div>
+                <div>
+                  <h2 style={{ fontSize: 14, fontWeight: 900, color: "#ffffff", lineHeight: 1.1 }}>
+                    Pedidos en Preparación
+                  </h2>
+                  <span style={{ fontSize: 10.5, color: "rgba(255,255,255,0.55)" }}>
+                    Exclusivamente pedidos para reparto a domicilio
+                  </span>
+                </div>
+              </div>
+
+              <div style={{
+                background: pedidosPreparacion.length > 0 ? "rgba(245,158,11,0.2)" : "rgba(255,255,255,0.06)",
+                border: pedidosPreparacion.length > 0 ? "1px solid #f59e0b" : "1px solid rgba(255,255,255,0.15)",
+                color: pedidosPreparacion.length > 0 ? "#fbbf24" : "rgba(255,255,255,0.5)",
+                fontSize: 11,
+                fontWeight: 900,
+                padding: "3px 9px",
+                borderRadius: 12
+              }}>
+                {pedidosPreparacion.length} en cocina
+              </div>
+            </div>
+
+            {pedidosPreparacion.length === 0 ? (
+              /* ESTADO VACÍO CUANDO NO HAY PEDIDOS EN PREPARACIÓN */
+              <div style={{
+                flex: 1,
+                minHeight: "calc(100vh - 160px)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "24px 16px",
+                textAlign: "center"
+              }}>
+                <div style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: "50%",
+                  background: "rgba(245,158,11,0.08)",
+                  border: "2px dashed rgba(245,158,11,0.4)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 14,
+                  boxShadow: "0 0 20px rgba(245,158,11,0.1)"
+                }}>
+                  <ChefHat size={36} color="#fbbf24" />
+                </div>
+
+                <h3 style={{ fontSize: 16, fontWeight: 800, color: "#ffffff", marginBottom: 6 }}>
+                  No hay pedidos en preparación ahora
+                </h3>
+
+                <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, lineHeight: 1.45, maxWidth: 310, margin: "0 auto 16px" }}>
+                  En cuanto entre un pedido de reparto a domicilio o cocina comience a elaborarlo, aparecerá automáticamente aquí en tiempo real.
+                </p>
+
+                <button
+                  onClick={manualRefresh}
+                  disabled={refreshing}
+                  style={{
+                    minHeight: 38,
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    color: "#ffffff",
+                    padding: "6px 14px",
+                    borderRadius: 10,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6
+                  }}
+                >
+                  <RefreshCw size={14} className={refreshing ? "spin" : ""} />
+                  <span>{refreshing ? "Actualizando..." : "Comprobar ahora"}</span>
+                </button>
+              </div>
+            ) : (
+              /* LISTADO DE PEDIDOS EN PREPARACIÓN */
+              <div style={{ padding: "14px 12px", display: "flex", flexDirection: "column", gap: 14 }}>
+                {pedidosPreparacion.map(p => {
+                  const isCocinando = p.estado_pedido === "preparando" || p.estado_pedido === "en_preparacion";
+                  const isPagado = p.metodo_pago === "stripe" || p.estado_pago === "pagado";
+
+                  return (
+                    <div
+                      key={p.id}
+                      style={{
+                        background: "#161311",
+                        borderRadius: 14,
+                        border: isCocinando ? "1.5px solid rgba(245,158,11,0.6)" : "1.5px solid rgba(56,189,248,0.4)",
+                        boxShadow: isCocinando ? "0 4px 18px rgba(245,158,11,0.18)" : "0 4px 14px rgba(0,0,0,0.6)",
+                        padding: "12px 14px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 10
+                      }}
+                    >
+                      {/* Cabecera Pedido */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderBottom: "1px solid rgba(255,255,255,0.08)",
+                        paddingBottom: 8,
+                        gap: 8
+                      }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                          <span style={{ fontFamily: "monospace", fontSize: 20, fontWeight: 900, color: "#ffffff" }}>
+                            #{p.numero_pedido}
+                          </span>
+
+                          <span className={isCocinando ? "pulse" : ""} style={{
+                            fontSize: 10.5,
+                            fontWeight: 900,
+                            padding: "3px 8px",
+                            borderRadius: 8,
+                            background: isCocinando ? "rgba(245,158,11,0.22)" : "rgba(56,189,248,0.2)",
+                            color: isCocinando ? "#fbbf24" : "#38bdf8",
+                            border: isCocinando ? "1px solid #f59e0b" : "1px solid #38bdf8"
+                          }}>
+                            {isCocinando ? "👨‍🍳 COCINANDO" : "📥 ENTRADA PENDIENTE"}
+                          </span>
+
+                          <span style={{ fontSize: 11.5, color: "rgba(255,255,255,0.45)" }}>
+                            {p.created_at ? new Date(p.created_at).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) : "Reciente"}
+                          </span>
+                        </div>
+
+                        {/* Importe y Estado de Pago */}
+                        <div style={{ textAlign: "right", display: "flex", alignItems: "center", gap: 8 }}>
+                          <div style={{
+                            fontSize: 10.5,
+                            fontWeight: 800,
+                            padding: "2px 6px",
+                            borderRadius: 6,
+                            background: isPagado ? "rgba(34,197,94,0.18)" : "rgba(251,191,36,0.18)",
+                            color: isPagado ? "#4ade80" : "#fbbf24",
+                            border: isPagado ? "1px solid rgba(34,197,94,0.4)" : "1px solid rgba(251,191,36,0.4)"
+                          }}>
+                            {isPagado ? "✓ PAGADO" : "💵 EN MANO"}
+                          </div>
+                          <div style={{ fontSize: 18, fontWeight: 900, fontFamily: "monospace", color: "#f5efe6", lineHeight: 1 }}>
+                            {Number(p.total).toFixed(2)} €
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Dirección de Destino */}
+                      <div style={{
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: 10,
+                        padding: "8px 10px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 8
+                      }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 5, color: "#ffffff", fontWeight: 800, fontSize: 14, lineHeight: 1.25 }}>
+                            <MapPin size={16} color="#ef4444" style={{ flexShrink: 0 }} />
+                            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                              {p.direccion_entrega || "Calle Mayor, La Ñora (Murcia)"}
+                            </span>
+                          </div>
+                          <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.55)", marginLeft: 21, marginTop: 2 }}>
+                            {p.direccion_detalles ? (
+                              <span style={{ color: "#fde68a", fontWeight: 600 }}>🏢 {p.direccion_detalles} · </span>
+                            ) : null}
+                            CP {p.codigo_postal || "30107"} · La Ñora
+                          </div>
+                        </div>
+
+                        {/* Botón Mapa */}
+                        <a
+                          href={getMapsUrl(p)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            flexShrink: 0,
+                            height: 32,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 5,
+                            background: "rgba(29,78,216,0.25)",
+                            border: "1px solid #2563eb",
+                            color: "#93c5fd",
+                            textDecoration: "none",
+                            fontSize: 12,
+                            fontWeight: 700,
+                            padding: "0 10px",
+                            borderRadius: 8
+                          }}
+                        >
+                          <Navigation size={13} />
+                          <span>Ver Ruta</span>
+                        </a>
+                      </div>
+
+                      {/* Contacto Cliente */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 10
+                      }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: "#ffffff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          <span style={{ color: "rgba(255,255,255,0.6)", marginRight: 4 }}>👤</span>
+                          {p.cliente_nombre}
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                          <a
+                            href={`tel:${p.cliente_telefono}`}
+                            style={{
+                              height: 30,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: 5,
+                              padding: "0 8px",
+                              borderRadius: 6,
+                              textDecoration: "none",
+                              fontSize: 12,
+                              fontWeight: 700,
+                              background: "rgba(255,255,255,0.08)",
+                              border: "1px solid rgba(255,255,255,0.2)",
+                              color: "#ffffff"
+                            }}
+                          >
+                            <Phone size={12} color="#60a5fa" />
+                            <span>{p.cliente_telefono}</span>
+                          </a>
+
+                          <a
+                            href={getWhatsAppUrl(p)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="WhatsApp"
+                            style={{
+                              width: 30,
+                              height: 30,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: 6,
+                              textDecoration: "none",
+                              background: "rgba(37,211,102,0.18)",
+                              border: "1px solid rgba(37,211,102,0.5)",
+                              color: "#25d366"
+                            }}
+                          >
+                            <MessageCircle size={16} />
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Notas (si existen) */}
+                      {p.notas && (
+                        <div style={{
+                          background: "rgba(200,30,34,0.12)",
+                          borderLeft: "3px solid #c81e22",
+                          padding: "6px 10px",
+                          borderRadius: 6,
+                          fontSize: 11.5,
+                          color: "#fca5a5"
+                        }}>
+                          <strong>📝 Nota:</strong> {p.notas}
+                        </div>
+                      )}
+
+                      {/* Mochila / Platos */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        flexWrap: "wrap",
+                        background: "rgba(0,0,0,0.25)",
+                        borderRadius: 8,
+                        padding: "6px 8px",
+                        border: "1px solid rgba(255,255,255,0.06)"
+                      }}>
+                        <span style={{ fontSize: 10.5, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>
+                          🎒 {p.items?.reduce((a, b) => a + (b.cantidad || 1), 0) || 0} platos:
+                        </span>
+                        {(p.items || []).map((it, idx) => (
+                          <span key={idx} style={{
+                            fontSize: 11,
+                            background: "rgba(255,255,255,0.08)",
+                            padding: "2px 6px",
+                            borderRadius: 6,
+                            color: "#f5efe6",
+                            fontWeight: 600
+                          }}>
+                            <strong style={{ color: "#fbbf24" }}>{it.cantidad}×</strong> {it.nombre}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Aviso de cocina + Botón de recogida rápida */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 8,
+                        paddingTop: 4,
+                        borderTop: "1px solid rgba(255,255,255,0.06)"
+                      }}>
+                        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", gap: 5 }}>
+                          <Clock size={13} color="#fbbf24" />
+                          <span>Cocina avisará al terminar</span>
+                        </div>
+
+                        <button
+                          onClick={() => handleStatusChange(p.id, "en_camino")}
+                          style={{
+                            height: 34,
+                            border: "none",
+                            borderRadius: 8,
+                            fontSize: 12,
+                            fontWeight: 900,
+                            cursor: "pointer",
+                            background: "linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)",
+                            color: "#ffffff",
+                            padding: "0 10px",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 5
+                          }}
+                          title="Si cocina ya te dio el pedido en mano"
+                        >
+                          <Bike size={14} />
+                          <span>Recoger y salir</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         ) : (
           /* ═══════════ PESTAÑA: HISTORIAL Y RENDIMIENTO COMPACTO ═══════════ */
           <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: 12 }}>
@@ -1063,13 +1483,13 @@ export default function DeliveryHomePage() {
         boxShadow: "0 -4px 20px rgba(0,0,0,0.9)",
         paddingBottom: "max(6px, env(safe-area-inset-bottom))"
       }}>
-        <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", padding: "4px 0 2px" }}>
+        <div style={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", padding: "4px 0 2px" }}>
           
-          {/* Pestaña 1: Repartos Activos */}
+          {/* Pestaña 1: Repartos Activos (Listos / En Camino) */}
           <button
             onClick={() => setActiveTab("activos")}
             style={{
-              padding: "4px 2px",
+              padding: "4px 1px",
               background: "transparent",
               border: "none",
               cursor: "pointer",
@@ -1082,7 +1502,7 @@ export default function DeliveryHomePage() {
           >
             <div style={{ position: "relative" }}>
               <Bike size={19} />
-              {pedidos.length > 0 && (
+              {pedidosActivos.length > 0 && (
                 <span style={{
                   position: "absolute",
                   top: -6,
@@ -1099,18 +1519,59 @@ export default function DeliveryHomePage() {
                   justifyContent: "center",
                   boxShadow: "0 0 8px #c81e22"
                 }}>
-                  {pedidos.length}
+                  {pedidosActivos.length}
                 </span>
               )}
             </div>
             <span style={{ fontSize: 10.5, fontWeight: 800 }}>Repartos</span>
           </button>
 
-          {/* Pestaña 2: Historial */}
+          {/* Pestaña 2: Pedidos en Preparación (Exclusivo Reparto) */}
+          <button
+            onClick={() => setActiveTab("preparacion")}
+            style={{
+              padding: "4px 1px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+              color: activeTab === "preparacion" ? "#fbbf24" : "rgba(255,255,255,0.5)"
+            }}
+          >
+            <div style={{ position: "relative" }}>
+              <ChefHat size={19} />
+              {pedidosPreparacion.length > 0 && (
+                <span style={{
+                  position: "absolute",
+                  top: -6,
+                  right: -10,
+                  background: "#f59e0b",
+                  color: "#000",
+                  fontSize: 10,
+                  fontWeight: 900,
+                  width: 17,
+                  height: 17,
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 0 8px #f59e0b"
+                }}>
+                  {pedidosPreparacion.length}
+                </span>
+              )}
+            </div>
+            <span style={{ fontSize: 10.5, fontWeight: 800, whiteSpace: "nowrap" }}>En Prep.</span>
+          </button>
+
+          {/* Pestaña 3: Historial */}
           <button
             onClick={() => { setActiveTab("historial"); fetchHistorial(); }}
             style={{
-              padding: "4px 2px",
+              padding: "4px 1px",
               background: "transparent",
               border: "none",
               cursor: "pointer",
@@ -1125,11 +1586,11 @@ export default function DeliveryHomePage() {
             <span style={{ fontSize: 10.5, fontWeight: 800 }}>Historial</span>
           </button>
 
-          {/* Pestaña 3: Alarma */}
+          {/* Pestaña 4: Alarma */}
           <button
             onClick={() => setAudioEnabled(!audioEnabled)}
             style={{
-              padding: "4px 2px",
+              padding: "4px 1px",
               background: "transparent",
               border: "none",
               cursor: "pointer",
